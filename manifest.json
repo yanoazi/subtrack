@@ -1,12 +1,13 @@
 {
   "name": "SubTrack - 訂閱管理",
   "short_name": "SubTrack",
-  "description": "輕鬆管理所有訂閱服務",
-  "start_url": "/",
+  "description": "輕鬆管理所有訂閱服務與願望清單",
+  "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
-  "background_color": "#0f0f13",
-  "theme_color": "#0f0f13",
-  "orientation": "portrait",
+  "background_color": "#0a0a14",
+  "theme_color": "#0a0a14",
+  "orientation": "portrait-primary",
   "icons": [
     {
       "src": "icon-192.svg",

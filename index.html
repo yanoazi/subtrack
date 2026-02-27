@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="theme-color" content="#0f0f13" id="theme-meta">
+  <meta name="theme-color" content="#0a0a14" id="theme-meta">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="SubTrack">
@@ -12,70 +12,103 @@
   <link rel="apple-touch-icon" href="icon-192.svg">
   <title>SubTrack</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
   <style>
-    /* ========== CSS Variables ========== */
+    /* ===== VARIABLES ===== */
     :root {
-      --bg: #0f0f13;
-      --bg2: #17171e;
-      --bg3: #1e1e28;
-      --surface: #22222f;
-      --surface2: #2a2a3a;
-      --border: rgba(255,255,255,0.07);
-      --text: #f0f0f5;
-      --text2: #9898b0;
-      --text3: #5a5a70;
-      --accent: #7c6cfc;
-      --accent2: #a78bfa;
-      --accent-glow: rgba(124,108,252,0.3);
+      --bg-1: #0a0a14;
+      --bg-2: #10101e;
+      --bg-3: #16162a;
+      --glass: rgba(255,255,255,0.04);
+      --glass-2: rgba(255,255,255,0.07);
+      --glass-3: rgba(255,255,255,0.11);
+      --glass-border: rgba(255,255,255,0.12);
+      --glass-border-2: rgba(255,255,255,0.18);
+      --text: #f0f0ff;
+      --text-2: rgba(240,240,255,0.55);
+      --text-3: rgba(240,240,255,0.28);
+      --accent: #8b7cf6;
+      --accent-2: #a78bfa;
+      --accent-glow: rgba(139,124,246,0.35);
+      --accent-soft: rgba(139,124,246,0.15);
       --green: #34d399;
+      --green-soft: rgba(52,211,153,0.15);
       --yellow: #fbbf24;
+      --yellow-soft: rgba(251,191,36,0.12);
       --red: #f87171;
-      --nav-h: 68px;
-      --radius: 16px;
-      --radius-sm: 10px;
-      --transition: 0.28s cubic-bezier(0.4,0,0.2,1);
+      --red-soft: rgba(248,113,113,0.12);
+      --pink: #f472b6;
+      --blue: #60a5fa;
+      --nav-h: 80px;
+      --r: 20px;
+      --r-sm: 12px;
+      --ease: cubic-bezier(0.4,0,0.2,1);
+      --spring: cubic-bezier(0.34,1.56,0.64,1);
     }
 
     [data-theme="light"] {
-      --bg: #f4f4f8;
-      --bg2: #eaeaf0;
-      --bg3: #e0e0ea;
-      --surface: #ffffff;
-      --surface2: #f0f0f8;
-      --border: rgba(0,0,0,0.07);
-      --text: #12121a;
-      --text2: #5a5a75;
-      --text3: #9898b0;
+      --bg-1: #eef0f8;
+      --bg-2: #e6e8f4;
+      --bg-3: #dddff0;
+      --glass: rgba(255,255,255,0.55);
+      --glass-2: rgba(255,255,255,0.7);
+      --glass-3: rgba(255,255,255,0.85);
+      --glass-border: rgba(0,0,0,0.08);
+      --glass-border-2: rgba(0,0,0,0.14);
+      --text: #1a1a2e;
+      --text-2: rgba(26,26,46,0.55);
+      --text-3: rgba(26,26,46,0.3);
       --accent: #6c5ce7;
-      --accent2: #8b7cf6;
-      --accent-glow: rgba(108,92,231,0.2);
+      --accent-2: #8b7cf6;
+      --accent-glow: rgba(108,92,231,0.25);
+      --accent-soft: rgba(108,92,231,0.12);
     }
 
-    /* ========== Reset & Base ========== */
+    /* ===== RESET ===== */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { height: 100%; font-size: 16px; }
+
     body {
       font-family: 'DM Sans', sans-serif;
-      background: var(--bg);
+      background: var(--bg-1);
       color: var(--text);
       height: 100%;
       overflow: hidden;
       -webkit-font-smoothing: antialiased;
-      transition: background var(--transition), color var(--transition);
+      transition: background 0.4s var(--ease), color 0.4s var(--ease);
     }
 
-    /* ========== App Shell ========== */
+    /* ===== BACKGROUND ORBS ===== */
+    body::before, body::after {
+      content: '';
+      position: fixed;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+      transition: opacity 0.4s;
+    }
+    body::before {
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(139,124,246,0.18) 0%, transparent 70%);
+      top: -150px; left: -100px;
+    }
+    body::after {
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(96,165,250,0.12) 0%, transparent 70%);
+      bottom: 100px; right: -100px;
+    }
+
+    /* ===== APP SHELL ===== */
     #app {
       height: 100dvh;
       display: flex;
       flex-direction: column;
       overflow: hidden;
       position: relative;
+      z-index: 1;
     }
 
-    /* ========== Page Container ========== */
+    /* ===== PAGES ===== */
     #pages {
       flex: 1;
       position: relative;
@@ -87,35 +120,86 @@
       inset: 0;
       overflow-y: auto;
       overflow-x: hidden;
-      padding: 24px 20px calc(var(--nav-h) + 24px);
+      padding: 24px 18px calc(var(--nav-h) + 48px);
       opacity: 0;
-      transform: translateY(12px);
+      transform: translateY(14px) scale(0.98);
       pointer-events: none;
-      transition: opacity 0.25s ease, transform 0.25s ease;
+      transition: opacity 0.3s var(--ease), transform 0.3s var(--ease);
       will-change: opacity, transform;
       -webkit-overflow-scrolling: touch;
     }
 
     .page.active {
       opacity: 1;
-      transform: translateY(0);
+      transform: translateY(0) scale(1);
       pointer-events: all;
     }
 
-    /* ========== Bottom Nav ========== */
+    /* ===== LIQUID GLASS MIXIN (applied via class) ===== */
+    .glass {
+      background: var(--glass);
+      backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--r);
+    }
+
+    .glass-2 {
+      background: var(--glass-2);
+      backdrop-filter: blur(32px) saturate(200%);
+      -webkit-backdrop-filter: blur(32px) saturate(200%);
+      border: 1px solid var(--glass-border-2);
+    }
+
+    /* ===== FLOATING NAV ===== */
+    #nav-wrap {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      width: calc(100% - 32px);
+      max-width: 420px;
+    }
+
     #nav {
-      height: var(--nav-h);
-      background: var(--bg2);
-      border-top: 1px solid var(--border);
+      height: 64px;
+      background: rgba(20,18,40,0.72);
+      backdrop-filter: blur(40px) saturate(200%) brightness(1.1);
+      -webkit-backdrop-filter: blur(40px) saturate(200%) brightness(1.1);
+      border: 1px solid var(--glass-border-2);
+      border-radius: 34px;
       display: flex;
       align-items: center;
       justify-content: space-around;
-      padding-bottom: env(safe-area-inset-bottom);
-      flex-shrink: 0;
+      padding: 6px 8px;
+      box-shadow:
+        0 8px 32px rgba(0,0,0,0.4),
+        0 2px 8px rgba(0,0,0,0.2),
+        inset 0 1px 0 rgba(255,255,255,0.1);
+      transition: background 0.4s var(--ease), border-color 0.4s var(--ease);
       position: relative;
-      z-index: 100;
-      backdrop-filter: blur(20px);
-      transition: background var(--transition), border-color var(--transition);
+    }
+
+    [data-theme="light"] #nav {
+      background: rgba(230,232,244,0.78);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8);
+    }
+
+    /* Sliding indicator pill — single element that moves across */
+    #nav-indicator {
+      position: absolute;
+      top: 6px;
+      height: calc(100% - 12px);
+      border-radius: 24px;
+      background: var(--glass-3);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--glass-border-2);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.18), 0 2px 8px rgba(0,0,0,0.18);
+      pointer-events: none;
+      transition: left 0.38s var(--spring), width 0.38s var(--spring);
+      z-index: 0;
     }
 
     .nav-btn {
@@ -123,158 +207,167 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 4px;
-      padding: 8px 0;
+      gap: 3px;
+      padding: 6px 4px;
       cursor: pointer;
       background: none;
       border: none;
-      color: var(--text3);
-      transition: color var(--transition);
+      color: var(--text-3);
+      transition: color 0.25s var(--ease), transform 0.18s var(--spring);
       position: relative;
       -webkit-tap-highlight-color: transparent;
+      border-radius: 24px;
+      z-index: 1;
     }
 
+    .nav-btn:active { transform: scale(0.86); }
     .nav-btn.active { color: var(--accent); }
 
     .nav-btn svg {
-      width: 22px;
-      height: 22px;
-      transition: transform 0.2s ease;
+      width: 20px; height: 20px;
+      transition: transform 0.3s var(--spring);
     }
 
-    .nav-btn.active svg { transform: scale(1.1); }
+    .nav-btn.active svg { transform: translateY(-1px) scale(1.08); }
 
     .nav-btn span {
-      font-size: 10px;
-      font-weight: 500;
-      letter-spacing: 0.3px;
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.4px;
       font-family: 'DM Sans', sans-serif;
     }
 
-    .nav-indicator {
+    /* ===== RIPPLE ===== */
+    .ripple-wrap { position: relative; overflow: hidden; }
+    .ripple {
       position: absolute;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%) scaleX(0);
-      width: 24px;
-      height: 2px;
-      background: var(--accent);
-      border-radius: 2px;
-      transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
+      border-radius: 50%;
+      background: rgba(255,255,255,0.15);
+      transform: scale(0);
+      animation: ripple-anim 0.5s linear;
+      pointer-events: none;
+    }
+    @keyframes ripple-anim {
+      to { transform: scale(4); opacity: 0; }
     }
 
-    .nav-btn.active .nav-indicator { transform: translateX(-50%) scaleX(1); }
-
-    /* ========== Header ========== */
-    .page-header {
-      margin-bottom: 24px;
-    }
-
+    /* ===== PAGE HEADERS ===== */
+    .page-header { margin-bottom: 22px; }
     .page-header h1 {
       font-family: 'Syne', sans-serif;
-      font-size: 26px;
+      font-size: 28px;
       font-weight: 800;
       color: var(--text);
-      letter-spacing: -0.5px;
+      letter-spacing: -0.6px;
     }
+    .page-header p { font-size: 13px; color: var(--text-2); margin-top: 4px; }
 
-    .page-header p {
-      font-size: 13px;
-      color: var(--text2);
-      margin-top: 4px;
-    }
-
-    /* ========== Dashboard ========== */
+    /* ===== STAT CARDS ===== */
     .stats-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-bottom: 24px;
+      gap: 10px;
+      margin-bottom: 22px;
     }
 
     .stat-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
+      background: var(--glass);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--r);
       padding: 18px 16px;
-      transition: background var(--transition), border-color var(--transition);
+      transition: background 0.4s, border-color 0.4s;
       position: relative;
       overflow: hidden;
     }
 
-    .stat-card.main {
-      grid-column: 1 / -1;
-      background: linear-gradient(135deg, var(--accent) 0%, #a78bfa 100%);
-      border: none;
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
     }
 
-    .stat-card.main .stat-label { color: rgba(255,255,255,0.7); }
+    .stat-card.main {
+      grid-column: 1 / -1;
+      background: linear-gradient(135deg, rgba(139,124,246,0.8) 0%, rgba(167,139,250,0.7) 100%);
+      border-color: rgba(255,255,255,0.2);
+      box-shadow: 0 8px 32px var(--accent-glow);
+    }
+
+    .stat-card.main .stat-label { color: rgba(255,255,255,0.65); }
     .stat-card.main .stat-value { color: #fff; }
-    .stat-card.main .stat-sub { color: rgba(255,255,255,0.6); }
+    .stat-card.main .stat-sub { color: rgba(255,255,255,0.5); }
 
     .stat-label {
-      font-size: 11px;
-      font-weight: 500;
-      color: var(--text2);
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--text-2);
       text-transform: uppercase;
-      letter-spacing: 0.8px;
+      letter-spacing: 1px;
       margin-bottom: 8px;
-      transition: color var(--transition);
     }
 
     .stat-value {
       font-family: 'Syne', sans-serif;
-      font-size: 28px;
+      font-size: 26px;
       font-weight: 700;
       color: var(--text);
       line-height: 1;
-      transition: color var(--transition);
     }
+    .stat-value.big { font-size: 34px; }
+    .stat-sub { font-size: 12px; color: var(--text-2); margin-top: 6px; }
 
-    .stat-value.big { font-size: 36px; }
-
-    .stat-sub {
-      font-size: 12px;
-      color: var(--text2);
-      margin-top: 6px;
-      transition: color var(--transition);
-    }
-
-    /* ========== Section Title ========== */
+    /* ===== SECTION TITLE ===== */
     .section-title {
       font-family: 'Syne', sans-serif;
-      font-size: 14px;
+      font-size: 11px;
       font-weight: 700;
-      color: var(--text2);
+      color: var(--text-3);
       text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 14px;
+      letter-spacing: 1.2px;
+      margin-bottom: 12px;
     }
 
-    /* ========== Subscription Cards ========== */
-    .sub-list { display: flex; flex-direction: column; gap: 10px; }
+    /* ===== SUBSCRIPTION CARDS ===== */
+    .sub-list { display: flex; flex-direction: column; gap: 8px; }
 
     .sub-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 16px;
+      background: var(--glass);
+      backdrop-filter: blur(20px) saturate(160%);
+      -webkit-backdrop-filter: blur(20px) saturate(160%);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--r);
+      padding: 14px 16px;
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 12px;
       cursor: pointer;
-      transition: background var(--transition), border-color var(--transition), transform 0.15s ease, box-shadow 0.15s ease;
+      transition: background 0.2s, border-color 0.2s, transform 0.2s var(--spring), box-shadow 0.2s;
       -webkit-tap-highlight-color: transparent;
-      text-decoration: none;
-      color: inherit;
+      position: relative;
+      overflow: hidden;
     }
 
-    .sub-card:active { transform: scale(0.98); }
+    .sub-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--glass-border-2), transparent);
+    }
+
+    .sub-card:active {
+      transform: scale(0.97);
+      background: var(--glass-2);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    }
 
     .sub-icon {
-      width: 44px;
-      height: 44px;
-      border-radius: 12px;
+      width: 42px; height: 42px;
+      border-radius: 13px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -286,52 +379,44 @@
 
     .sub-name {
       font-family: 'Syne', sans-serif;
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 600;
       color: var(--text);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      transition: color var(--transition);
     }
 
-    .sub-meta {
-      font-size: 12px;
-      color: var(--text2);
-      margin-top: 3px;
-      transition: color var(--transition);
-    }
+    .sub-meta { font-size: 11px; color: var(--text-2); margin-top: 3px; }
 
     .sub-price {
       font-family: 'Syne', sans-serif;
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 700;
       color: var(--text);
       flex-shrink: 0;
-      transition: color var(--transition);
     }
 
     .badge {
       display: inline-flex;
       align-items: center;
-      padding: 2px 8px;
+      padding: 2px 7px;
       border-radius: 20px;
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 0.3px;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.4px;
     }
 
-    .badge-green { background: rgba(52,211,153,0.15); color: var(--green); }
-    .badge-yellow { background: rgba(251,191,36,0.15); color: var(--yellow); }
-    .badge-red { background: rgba(248,113,113,0.15); color: var(--red); }
+    .badge-green { background: var(--green-soft); color: var(--green); }
+    .badge-yellow { background: var(--yellow-soft); color: var(--yellow); }
+    .badge-red { background: var(--red-soft); color: var(--red); }
 
-    /* ========== FAB ========== */
+    /* ===== FAB ===== */
     .fab {
       position: fixed;
-      bottom: calc(var(--nav-h) + 20px);
+      bottom: calc(var(--nav-h) + 52px);
       right: 20px;
-      width: 52px;
-      height: 52px;
+      width: 50px; height: 50px;
       border-radius: 50%;
       background: var(--accent);
       border: none;
@@ -341,206 +426,234 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 4px 20px var(--accent-glow);
+      box-shadow: 0 4px 20px var(--accent-glow), inset 0 1px 0 rgba(255,255,255,0.2);
       z-index: 50;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      transition: transform 0.2s var(--spring), box-shadow 0.2s;
       -webkit-tap-highlight-color: transparent;
     }
 
-    .fab:active { transform: scale(0.92); box-shadow: 0 2px 10px var(--accent-glow); }
+    .fab:active { transform: scale(0.9); }
 
-    /* ========== Modal ========== */
+    /* ===== MODAL ===== */
     .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.6);
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.5);
       z-index: 200;
       display: flex;
       align-items: flex-end;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.25s ease;
-      backdrop-filter: blur(4px);
+      transition: opacity 0.3s var(--ease);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
     }
 
-    .modal-overlay.open {
-      opacity: 1;
-      pointer-events: all;
-    }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
 
     .modal {
       width: 100%;
-      max-height: 92dvh;
-      background: var(--bg2);
-      border-radius: 24px 24px 0 0;
+      max-height: 93dvh;
+      background: rgba(16,16,30,0.92);
+      backdrop-filter: blur(40px) saturate(200%);
+      -webkit-backdrop-filter: blur(40px) saturate(200%);
+      border-radius: 28px 28px 0 0;
+      border-top: 1px solid var(--glass-border-2);
       overflow: hidden;
       transform: translateY(100%);
-      transition: transform 0.3s cubic-bezier(0.34,1.2,0.64,1);
+      transition: transform 0.35s var(--spring);
       display: flex;
       flex-direction: column;
+      box-shadow: 0 -8px 40px rgba(0,0,0,0.4);
     }
 
-    .modal-overlay.open .modal {
-      transform: translateY(0);
+    [data-theme="light"] .modal {
+      background: rgba(230,232,244,0.92);
     }
+
+    .modal-overlay.open .modal { transform: translateY(0); }
 
     .modal-handle {
-      width: 36px;
-      height: 4px;
-      background: var(--border);
+      width: 36px; height: 4px;
+      background: var(--glass-border-2);
       border-radius: 2px;
       margin: 12px auto 0;
       flex-shrink: 0;
     }
 
     .modal-header {
-      padding: 16px 20px;
+      padding: 14px 20px 14px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       flex-shrink: 0;
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1px solid var(--glass-border);
     }
 
     .modal-title {
       font-family: 'Syne', sans-serif;
-      font-size: 18px;
+      font-size: 17px;
       font-weight: 700;
       color: var(--text);
     }
 
     .modal-close {
-      width: 32px;
-      height: 32px;
+      width: 30px; height: 30px;
       border-radius: 50%;
-      background: var(--surface);
-      border: none;
-      color: var(--text2);
-      font-size: 18px;
+      background: var(--glass-2);
+      border: 1px solid var(--glass-border);
+      color: var(--text-2);
+      font-size: 16px;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      -webkit-tap-highlight-color: transparent;
+      transition: background 0.2s, transform 0.2s var(--spring);
     }
+    .modal-close:active { transform: scale(0.9); }
 
     .modal-body {
-      padding: 20px;
+      padding: 18px 20px;
       overflow-y: auto;
       flex: 1;
       -webkit-overflow-scrolling: touch;
     }
 
-    /* ========== Form ========== */
-    .form-group { margin-bottom: 18px; }
+    /* ===== FORMS ===== */
+    .form-group { margin-bottom: 16px; }
 
     .form-label {
       display: block;
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--text2);
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text-2);
       text-transform: uppercase;
-      letter-spacing: 0.7px;
-      margin-bottom: 8px;
+      letter-spacing: 0.9px;
+      margin-bottom: 7px;
     }
 
     .form-input {
       width: 100%;
-      padding: 13px 16px;
-      background: var(--surface);
-      border: 1.5px solid var(--border);
-      border-radius: var(--radius-sm);
+      padding: 12px 15px;
+      background: var(--glass);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--r-sm);
       color: var(--text);
-      font-size: 15px;
+      font-size: 14px;
       font-family: 'DM Sans', sans-serif;
       outline: none;
-      transition: border-color 0.2s ease, background var(--transition);
+      transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
       -webkit-appearance: none;
     }
 
-    .form-input:focus { border-color: var(--accent); }
+    .form-input::placeholder { color: var(--text-3); }
+    .form-input:focus {
+      border-color: var(--accent);
+      background: var(--glass-2);
+      box-shadow: 0 0 0 3px var(--accent-soft);
+    }
 
     select.form-input { cursor: pointer; }
 
-    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
+    /* ===== BUTTONS ===== */
     .btn {
       width: 100%;
-      padding: 15px;
-      border-radius: var(--radius-sm);
-      font-size: 15px;
-      font-weight: 600;
+      padding: 14px;
+      border-radius: var(--r-sm);
+      font-size: 14px;
+      font-weight: 700;
       font-family: 'Syne', sans-serif;
       cursor: pointer;
       border: none;
-      transition: opacity 0.2s, transform 0.15s;
+      transition: opacity 0.2s, transform 0.15s var(--spring), box-shadow 0.2s;
       -webkit-tap-highlight-color: transparent;
+      position: relative;
+      overflow: hidden;
     }
 
-    .btn:active { transform: scale(0.97); opacity: 0.85; }
+    .btn:active { transform: scale(0.97); opacity: 0.88; }
 
-    .btn-primary { background: var(--accent); color: #fff; }
-    .btn-danger { background: var(--red); color: #fff; margin-top: 10px; }
-    .btn-ghost { background: var(--surface); color: var(--text2); margin-top: 10px; border: 1px solid var(--border); }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
+      color: #fff;
+      box-shadow: 0 4px 16px var(--accent-glow);
+    }
 
-    /* ========== Emoji Picker ========== */
+    .btn-danger {
+      background: var(--red-soft);
+      color: var(--red);
+      border: 1px solid rgba(248,113,113,0.25);
+      margin-top: 8px;
+    }
+
+    .btn-ghost {
+      background: var(--glass);
+      color: var(--text-2);
+      border: 1px solid var(--glass-border);
+      margin-top: 8px;
+      backdrop-filter: blur(10px);
+    }
+
+    /* ===== EMOJI GRID ===== */
     .emoji-grid {
       display: grid;
       grid-template-columns: repeat(8, 1fr);
-      gap: 6px;
-      max-height: 160px;
+      gap: 5px;
+      max-height: 150px;
       overflow-y: auto;
     }
 
     .emoji-btn {
       aspect-ratio: 1;
       border: none;
-      background: var(--surface);
+      background: var(--glass);
       border-radius: 8px;
-      font-size: 20px;
+      font-size: 18px;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: background 0.15s ease, transform 0.1s ease;
+      transition: background 0.15s, transform 0.15s var(--spring), border-color 0.15s;
       -webkit-tap-highlight-color: transparent;
+      border: 1px solid transparent;
     }
 
-    .emoji-btn:active { transform: scale(0.88); }
-    .emoji-btn.selected { background: var(--accent); }
+    .emoji-btn:active { transform: scale(0.85); }
+    .emoji-btn.selected { background: var(--accent-soft); border-color: var(--accent); }
 
-    /* ========== Color Picker ========== */
-    .color-grid {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
+    /* ===== COLOR GRID ===== */
+    .color-grid { display: flex; gap: 9px; flex-wrap: wrap; }
 
     .color-dot {
-      width: 32px;
-      height: 32px;
+      width: 30px; height: 30px;
       border-radius: 50%;
       cursor: pointer;
       border: 2px solid transparent;
-      transition: transform 0.15s, border-color 0.15s;
+      transition: transform 0.2s var(--spring), border-color 0.15s, box-shadow 0.2s;
       -webkit-tap-highlight-color: transparent;
     }
 
-    .color-dot.selected { border-color: var(--text); transform: scale(1.15); }
+    .color-dot.selected {
+      border-color: var(--text);
+      transform: scale(1.2);
+      box-shadow: 0 0 0 3px var(--glass-border-2);
+    }
 
-    /* ========== Calendar Page ========== */
+    /* ===== CALENDAR ===== */
     .calendar-grid {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
-      gap: 4px;
-      margin-bottom: 24px;
+      gap: 3px;
+      margin-bottom: 20px;
     }
 
     .cal-day-label {
       text-align: center;
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--text3);
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text-3);
       padding: 6px 0;
       text-transform: uppercase;
       letter-spacing: 0.5px;
@@ -552,8 +665,8 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 13px;
-      color: var(--text2);
+      font-size: 12px;
+      color: var(--text-2);
       position: relative;
       cursor: default;
     }
@@ -562,35 +675,34 @@
       background: var(--accent);
       color: #fff;
       font-weight: 700;
+      box-shadow: 0 2px 8px var(--accent-glow);
     }
 
     .cal-day.has-event::after {
       content: '';
       position: absolute;
-      bottom: 3px;
-      left: 50%;
+      bottom: 2px; left: 50%;
       transform: translateX(-50%);
-      width: 4px;
-      height: 4px;
+      width: 3px; height: 3px;
       border-radius: 50%;
-      background: var(--accent2);
+      background: var(--accent-2);
     }
 
-    .cal-day.today::after { background: rgba(255,255,255,0.7); }
+    .cal-day.today::after { background: rgba(255,255,255,0.6); }
 
     .cal-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
     }
 
     .cal-nav {
-      background: var(--surface);
-      border: none;
+      background: var(--glass);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--glass-border);
       color: var(--text);
-      width: 36px;
-      height: 36px;
+      width: 36px; height: 36px;
       border-radius: 10px;
       display: flex;
       align-items: center;
@@ -598,33 +710,35 @@
       cursor: pointer;
       font-size: 16px;
       -webkit-tap-highlight-color: transparent;
-      transition: background var(--transition);
+      transition: background 0.2s, transform 0.15s var(--spring);
     }
+
+    .cal-nav:active { transform: scale(0.9); }
 
     .cal-month {
       font-family: 'Syne', sans-serif;
-      font-size: 17px;
+      font-size: 16px;
       font-weight: 700;
       color: var(--text);
     }
 
-    /* ========== Settings ========== */
+    /* ===== SETTINGS ===== */
     .settings-section {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      margin-bottom: 20px;
+      background: var(--glass);
+      backdrop-filter: blur(20px) saturate(160%);
+      -webkit-backdrop-filter: blur(20px) saturate(160%);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--r);
+      margin-bottom: 16px;
       overflow: hidden;
-      transition: background var(--transition), border-color var(--transition);
     }
 
     .settings-item {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 16px 18px;
-      border-bottom: 1px solid var(--border);
-      transition: border-color var(--transition);
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--glass-border);
     }
 
     .settings-item:last-child { border-bottom: none; }
@@ -632,182 +746,341 @@
     .settings-item-left {
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 12px;
     }
 
     .settings-icon {
-      width: 36px;
-      height: 36px;
+      width: 34px; height: 34px;
       border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 17px;
+      font-size: 16px;
     }
 
     .settings-label {
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 500;
       color: var(--text);
-      transition: color var(--transition);
     }
 
-    .settings-value {
-      font-size: 13px;
-      color: var(--text2);
-      transition: color var(--transition);
-    }
-
-    /* ========== Toggle Switch ========== */
+    /* ===== TOGGLE ===== */
     .toggle-track {
-      width: 52px;
-      height: 28px;
-      background: var(--surface2);
-      border-radius: 14px;
+      width: 48px; height: 26px;
+      background: var(--glass-2);
+      border: 1px solid var(--glass-border);
+      border-radius: 13px;
       position: relative;
       cursor: pointer;
-      transition: background 0.25s ease;
+      transition: background 0.25s, border-color 0.25s;
       flex-shrink: 0;
       -webkit-tap-highlight-color: transparent;
-      border: 1.5px solid var(--border);
     }
 
     .toggle-track.on { background: var(--accent); border-color: var(--accent); }
 
     .toggle-thumb {
       position: absolute;
-      top: 3px;
-      left: 3px;
-      width: 20px;
-      height: 20px;
+      top: 3px; left: 3px;
+      width: 18px; height: 18px;
       background: #fff;
       border-radius: 50%;
-      transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
-      box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+      transition: transform 0.25s var(--spring);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.25);
     }
 
-    .toggle-track.on .toggle-thumb { transform: translateX(24px); }
+    .toggle-track.on .toggle-thumb { transform: translateX(22px); }
 
-    /* ========== Theme Slider ========== */
+    /* ===== THEME SLIDER ===== */
     .theme-slider-wrap {
-      background: var(--bg3);
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
       border-radius: 12px;
-      padding: 4px;
+      padding: 3px;
       display: flex;
-      gap: 2px;
-      width: 120px;
+      width: 116px;
       position: relative;
+      backdrop-filter: blur(10px);
     }
 
-    .theme-slider-pill {
+    .theme-pill {
       position: absolute;
-      top: 4px;
-      left: 4px;
-      width: calc(50% - 4px);
-      height: calc(100% - 8px);
+      top: 3px; left: 3px;
+      width: calc(50% - 3px);
+      height: calc(100% - 6px);
       background: var(--accent);
       border-radius: 9px;
-      transition: transform 0.3s cubic-bezier(0.34,1.2,0.64,1);
-      z-index: 0;
+      transition: transform 0.3s var(--spring);
+      box-shadow: 0 2px 8px var(--accent-glow);
     }
 
-    .theme-slider-pill.light-mode { transform: translateX(calc(100% + 2px)); }
+    .theme-pill.light { transform: translateX(calc(100% + 0px)); }
 
     .theme-option {
       flex: 1;
       padding: 6px 0;
       text-align: center;
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--text2);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-3);
       cursor: pointer;
-      position: relative;
-      z-index: 1;
-      transition: color 0.2s ease;
-      -webkit-tap-highlight-color: transparent;
+      position: relative; z-index: 1;
+      transition: color 0.2s;
       user-select: none;
+      -webkit-tap-highlight-color: transparent;
     }
 
     .theme-option.active { color: #fff; }
 
-    /* ========== Analytics ========== */
+    /* ===== ANALYTICS ===== */
     .chart-wrap {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 20px;
-      margin-bottom: 16px;
-      transition: background var(--transition), border-color var(--transition);
+      background: var(--glass);
+      backdrop-filter: blur(20px) saturate(160%);
+      -webkit-backdrop-filter: blur(20px) saturate(160%);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--r);
+      padding: 18px;
+      margin-bottom: 14px;
     }
 
     .chart-title {
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--text2);
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text-2);
       text-transform: uppercase;
-      letter-spacing: 0.8px;
-      margin-bottom: 16px;
+      letter-spacing: 1px;
+      margin-bottom: 14px;
     }
 
-    .bar-chart { display: flex; align-items: flex-end; gap: 6px; height: 80px; }
+    .bar-chart { display: flex; align-items: flex-end; gap: 5px; height: 72px; }
 
     .bar-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
 
     .bar {
       width: 100%;
-      border-radius: 4px 4px 0 0;
-      background: var(--accent);
-      opacity: 0.7;
+      border-radius: 5px 5px 0 0;
+      background: linear-gradient(to top, var(--accent), var(--accent-2));
+      opacity: 0.4;
       min-height: 4px;
-      transition: opacity 0.2s, height 0.4s ease;
     }
 
-    .bar.current { opacity: 1; }
+    .bar.current { opacity: 1; box-shadow: 0 0 10px var(--accent-glow); }
+    .bar-label { font-size: 8px; color: var(--text-3); }
 
-    .bar-label { font-size: 9px; color: var(--text3); }
-
-    /* ========== Empty State ========== */
-    .empty-state {
+    /* ===== WISHLIST ===== */
+    .wish-total {
+      background: linear-gradient(135deg, rgba(244,114,182,0.3) 0%, rgba(139,124,246,0.3) 100%);
+      border: 1px solid rgba(244,114,182,0.25);
+      border-radius: var(--r);
+      padding: 20px;
+      margin-bottom: 20px;
       text-align: center;
-      padding: 48px 20px;
-      color: var(--text2);
+      backdrop-filter: blur(20px);
+      position: relative;
+      overflow: hidden;
     }
 
-    .empty-icon { font-size: 48px; margin-bottom: 16px; opacity: 0.5; }
+    .wish-total::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+    }
 
-    .empty-title {
-      font-family: 'Syne', sans-serif;
-      font-size: 18px;
+    .wish-total-label {
+      font-size: 11px;
       font-weight: 700;
-      color: var(--text);
+      color: rgba(244,114,182,0.8);
+      text-transform: uppercase;
+      letter-spacing: 1px;
       margin-bottom: 8px;
     }
 
-    .empty-desc { font-size: 14px; line-height: 1.6; }
-
-    /* ========== Animations ========== */
-    @keyframes fadeSlideIn {
-      from { opacity: 0; transform: translateY(8px); }
-      to { opacity: 1; transform: translateY(0); }
+    .wish-total-value {
+      font-family: 'Syne', sans-serif;
+      font-size: 36px;
+      font-weight: 800;
+      color: var(--text);
     }
 
-    .animate-in { animation: fadeSlideIn 0.3s ease forwards; }
+    .wish-total-sub { font-size: 12px; color: var(--text-2); margin-top: 4px; }
 
-    /* ========== Scrollbar ========== */
+    .wish-card {
+      background: var(--glass);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--r);
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s var(--spring);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .wish-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--glass-border-2), transparent);
+    }
+
+    .wish-card:active { transform: scale(0.97); }
+
+    .wish-cat-tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      border-radius: 20px;
+      font-size: 9px;
+      font-weight: 700;
+      background: var(--accent-soft);
+      color: var(--accent-2);
+      letter-spacing: 0.3px;
+    }
+
+    .wish-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      color: var(--accent-2);
+      text-decoration: none;
+      padding: 2px 8px;
+      border-radius: 20px;
+      background: var(--accent-soft);
+      border: 1px solid rgba(139,124,246,0.2);
+      transition: background 0.2s;
+    }
+
+    .wish-link:active { background: var(--glass-3); }
+
+    /* ===== PWA INSTALL BANNER ===== */
+    #install-banner {
+      position: fixed;
+      top: 16px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-120px);
+      width: calc(100% - 32px);
+      max-width: 400px;
+      background: rgba(16,16,30,0.92);
+      backdrop-filter: blur(40px);
+      -webkit-backdrop-filter: blur(40px);
+      border: 1px solid var(--glass-border-2);
+      border-radius: 18px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      z-index: 300;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      transition: transform 0.4s var(--spring);
+    }
+
+    [data-theme="light"] #install-banner {
+      background: rgba(230,232,244,0.95);
+    }
+
+    #install-banner.visible { transform: translateX(-50%) translateY(0); }
+
+    .install-icon { font-size: 28px; flex-shrink: 0; }
+
+    .install-text { flex: 1; }
+    .install-text strong {
+      font-family: 'Syne', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+      display: block;
+    }
+    .install-text span { font-size: 11px; color: var(--text-2); }
+
+    .install-btn {
+      padding: 7px 14px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 700;
+      font-family: 'Syne', sans-serif;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: transform 0.15s var(--spring), opacity 0.2s;
+    }
+
+    .install-btn:active { transform: scale(0.93); }
+
+    .install-dismiss {
+      background: none;
+      border: none;
+      color: var(--text-3);
+      font-size: 18px;
+      cursor: pointer;
+      flex-shrink: 0;
+      padding: 2px;
+      line-height: 1;
+    }
+
+    /* ===== EMPTY STATE ===== */
+    .empty-state {
+      text-align: center;
+      padding: 40px 16px;
+      color: var(--text-2);
+    }
+
+    .empty-icon { font-size: 44px; margin-bottom: 14px; opacity: 0.4; }
+    .empty-icon-svg { margin-bottom: 14px; opacity: 0.5; display: flex; justify-content: center; }
+
+    .empty-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .empty-desc { font-size: 13px; line-height: 1.6; color: var(--text-2); }
+
+    /* ===== SCROLLBAR ===== */
     ::-webkit-scrollbar { width: 0; }
+
+    /* ===== ANIMATIONS ===== */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .anim { animation: fadeUp 0.3s var(--ease) forwards; }
   </style>
 </head>
 <body>
 <div id="app">
+  <!-- PWA Install Banner -->
+  <div id="install-banner">
+    <div class="install-icon">
+      <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="var(--accent)" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+    </div>
+    <div class="install-text">
+      <strong>安裝 SubTrack</strong>
+      <span>加入主畫面，隨時快速使用</span>
+    </div>
+    <button class="install-btn" id="install-btn">安裝</button>
+    <button class="install-dismiss" onclick="dismissInstall()">✕</button>
+  </div>
+
   <!-- Pages -->
   <div id="pages">
-    <!-- Dashboard -->
+    <!-- HOME -->
     <div class="page active" id="page-home">
       <div class="page-header">
         <h1>SubTrack</h1>
         <p id="today-date"></p>
       </div>
-
       <div class="stats-grid">
         <div class="stat-card main">
           <div class="stat-label">月均支出</div>
@@ -825,41 +1098,33 @@
           <div class="stat-sub">7天內</div>
         </div>
       </div>
-
       <div class="section-title">即將扣款</div>
       <div class="sub-list" id="upcoming-list"></div>
-
-      <div class="section-title" style="margin-top:24px">所有訂閱</div>
+      <div class="section-title" style="margin-top:20px">所有訂閱</div>
       <div class="sub-list" id="all-list"></div>
     </div>
 
-    <!-- Calendar -->
+    <!-- CALENDAR -->
     <div class="page" id="page-calendar">
-      <div class="page-header">
-        <h1>日曆</h1>
-        <p>訂閱到期一覽</p>
-      </div>
+      <div class="page-header"><h1>日曆</h1><p>訂閱到期一覽</p></div>
       <div class="cal-header">
-        <button class="cal-nav" id="cal-prev">‹</button>
+        <button class="cal-nav ripple-wrap" id="cal-prev">‹</button>
         <div class="cal-month" id="cal-title"></div>
-        <button class="cal-nav" id="cal-next">›</button>
+        <button class="cal-nav ripple-wrap" id="cal-next">›</button>
       </div>
       <div class="calendar-grid" id="cal-grid"></div>
       <div class="section-title">本月到期</div>
       <div class="sub-list" id="cal-events"></div>
     </div>
 
-    <!-- Analytics -->
+    <!-- ANALYTICS -->
     <div class="page" id="page-analytics">
-      <div class="page-header">
-        <h1>分析</h1>
-        <p>消費洞察</p>
-      </div>
+      <div class="page-header"><h1>分析</h1><p>消費洞察</p></div>
       <div class="chart-wrap">
         <div class="chart-title">近6月支出</div>
         <div class="bar-chart" id="bar-chart"></div>
       </div>
-      <div class="stats-grid" style="margin-bottom:16px">
+      <div class="stats-grid" style="margin-bottom:14px">
         <div class="stat-card">
           <div class="stat-label">日均花費</div>
           <div class="stat-value" id="ana-daily">$0</div>
@@ -873,27 +1138,40 @@
       <div class="sub-list" id="ana-list"></div>
     </div>
 
-    <!-- Settings -->
-    <div class="page" id="page-settings">
-      <div class="page-header">
-        <h1>設定</h1>
+    <!-- WISHLIST -->
+    <div class="page" id="page-wishlist">
+      <div class="page-header"><h1>願望清單</h1><p>追蹤想買的商品</p></div>
+      <div class="wish-total">
+        <div class="wish-total-label">願望總金額</div>
+        <div class="wish-total-value" id="wish-total">$0</div>
+        <div class="wish-total-sub" id="wish-count">共 0 件商品</div>
       </div>
+      <div class="section-title">商品清單</div>
+      <div class="sub-list" id="wish-list"></div>
+    </div>
 
+    <!-- SETTINGS -->
+    <div class="page" id="page-settings">
+      <div class="page-header"><h1>設定</h1></div>
       <div class="settings-section">
         <div class="settings-item">
           <div class="settings-item-left">
-            <div class="settings-icon" style="background:rgba(124,108,252,0.15);">🌓</div>
+            <div class="settings-icon" style="background:var(--accent-soft)">
+              <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="var(--accent)" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M18.364 17.657l-.707-.707M6.343 6.343l-.707-.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+            </div>
             <div class="settings-label">外觀模式</div>
           </div>
           <div class="theme-slider-wrap" id="theme-slider" onclick="toggleTheme()">
-            <div class="theme-slider-pill" id="theme-pill"></div>
-            <div class="theme-option active" id="theme-dark-label">暗</div>
-            <div class="theme-option" id="theme-light-label">亮</div>
+            <div class="theme-pill" id="theme-pill"></div>
+            <div class="theme-option active" id="theme-dark-lbl">暗</div>
+            <div class="theme-option" id="theme-light-lbl">亮</div>
           </div>
         </div>
         <div class="settings-item">
           <div class="settings-item-left">
-            <div class="settings-icon" style="background:rgba(52,211,153,0.15);">💰</div>
+            <div class="settings-icon" style="background:var(--green-soft)">
+              <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="var(--green)" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
             <div class="settings-label">預設幣別</div>
           </div>
           <select class="form-input" style="width:auto;padding:6px 12px;" id="currency-select">
@@ -906,10 +1184,12 @@
         </div>
         <div class="settings-item">
           <div class="settings-item-left">
-            <div class="settings-icon" style="background:rgba(251,191,36,0.15);">🔔</div>
+            <div class="settings-icon" style="background:var(--yellow-soft)">
+              <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="var(--yellow)" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+            </div>
             <div class="settings-label">到期提醒</div>
           </div>
-          <div class="toggle-track on" id="notify-toggle" onclick="toggleSetting(this)">
+          <div class="toggle-track on" id="notify-toggle" onclick="this.classList.toggle('on')">
             <div class="toggle-thumb"></div>
           </div>
         </div>
@@ -918,73 +1198,100 @@
       <div class="settings-section">
         <div class="settings-item">
           <div class="settings-item-left">
-            <div class="settings-icon" style="background:rgba(248,113,113,0.15);">🗑️</div>
+            <div class="settings-icon" style="background:var(--accent-soft)">
+              <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="var(--accent)" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            </div>
+            <div class="settings-label">安裝 App</div>
+          </div>
+          <button class="install-btn" id="settings-install-btn" onclick="triggerInstall()">安裝</button>
+        </div>
+        <div class="settings-item">
+          <div class="settings-item-left">
+            <div class="settings-icon" style="background:var(--red-soft)">
+              <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="var(--red)" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+            </div>
             <div class="settings-label">清除所有資料</div>
           </div>
-          <button class="btn btn-danger" style="width:auto;padding:8px 16px;margin:0;font-size:13px;" onclick="clearAllData()">清除</button>
+          <button onclick="clearAllData()" style="padding:7px 14px;background:var(--red-soft);color:var(--red);border:1px solid rgba(248,113,113,0.25);border-radius:10px;font-size:12px;font-weight:700;font-family:'Syne',sans-serif;cursor:pointer;">清除</button>
         </div>
       </div>
 
-      <div style="text-align:center;margin-top:30px;color:var(--text3);font-size:12px;">
-        SubTrack v1.0 · 資料存於本機
+      <!-- iOS Install Hint -->
+      <div class="settings-section" id="ios-hint" style="display:none">
+        <div class="settings-item" style="flex-direction:column;align-items:flex-start;gap:8px;">
+          <div class="settings-item-left">
+            <div class="settings-icon" style="background:var(--accent-soft)"><svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="var(--accent)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12" stroke-linecap="round"/><line x1="12" y1="16" x2="12.01" y2="16" stroke-linecap="round" stroke-width="2.5"/></svg></div>
+            <div class="settings-label">iOS 安裝方式</div>
+          </div>
+          <div style="font-size:12px;color:var(--text-2);line-height:1.6;padding-left:4px">
+            點擊 Safari 底部的 <strong style="color:var(--text)">分享按鈕 ⎋</strong>，<br>
+            然後選擇「<strong style="color:var(--text)">加入主畫面</strong>」即可安裝。
+          </div>
+        </div>
+      </div>
+
+      <div style="text-align:center;margin-top:24px;color:var(--text-3);font-size:11px;letter-spacing:0.5px;">
+        SubTrack v2.0 · Liquid Glass Edition
       </div>
     </div>
   </div>
 
-  <!-- Bottom Nav -->
-  <nav id="nav">
-    <button class="nav-btn active" onclick="goPage('home')" id="nav-home">
-      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
-      <span>首頁</span>
-      <div class="nav-indicator"></div>
-    </button>
-    <button class="nav-btn" onclick="goPage('calendar')" id="nav-calendar">
-      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="16" y1="2" x2="16" y2="6" stroke-linecap="round"/><line x1="8" y1="2" x2="8" y2="6" stroke-linecap="round"/><line x1="3" y1="10" x2="21" y2="10" stroke-linecap="round"/></svg>
-      <span>日曆</span>
-      <div class="nav-indicator"></div>
-    </button>
-    <button class="nav-btn" onclick="goPage('analytics')" id="nav-analytics">
-      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <span>分析</span>
-      <div class="nav-indicator"></div>
-    </button>
-    <button class="nav-btn" onclick="goPage('settings')" id="nav-settings">
-      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path stroke-linecap="round" stroke-linejoin="round" d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
-      <span>設定</span>
-      <div class="nav-indicator"></div>
-    </button>
-  </nav>
+  <!-- Floating Nav -->
+  <div id="nav-wrap">
+    <nav id="nav">
+      <!-- Sliding indicator pill -->
+      <div id="nav-indicator"></div>
+      <button class="nav-btn active" onclick="goPage('home')" id="nav-home">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+        <span>首頁</span>
+      </button>
+      <button class="nav-btn" onclick="goPage('calendar')" id="nav-calendar">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6" stroke-linecap="round"/><line x1="8" y1="2" x2="8" y2="6" stroke-linecap="round"/><line x1="3" y1="10" x2="21" y2="10" stroke-linecap="round"/></svg>
+        <span>日曆</span>
+      </button>
+      <button class="nav-btn" onclick="goPage('analytics')" id="nav-analytics">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>分析</span>
+      </button>
+      <button class="nav-btn" onclick="goPage('wishlist')" id="nav-wishlist">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+        <span>願望</span>
+      </button>
+      <button class="nav-btn" onclick="goPage('settings')" id="nav-settings">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path stroke-linecap="round" stroke-linejoin="round" d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+        <span>設定</span>
+      </button>
+    </nav>
+  </div>
 </div>
 
 <!-- FAB -->
-<button class="fab" onclick="openAddModal()">+</button>
+<button class="fab ripple-wrap" id="fab" onclick="openFab()">
+  <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19" stroke-linecap="round"/><line x1="5" y1="12" x2="19" y2="12" stroke-linecap="round"/></svg>
+</button>
 
-<!-- Add/Edit Modal -->
-<div class="modal-overlay" id="modal-overlay" onclick="closeModalOutside(event)">
-  <div class="modal" id="modal">
+<!-- Subscription Modal -->
+<div class="modal-overlay" id="sub-overlay" onclick="closeModalOutside(event,'sub-overlay')">
+  <div class="modal">
     <div class="modal-handle"></div>
     <div class="modal-header">
-      <div class="modal-title" id="modal-title">新增訂閱</div>
-      <button class="modal-close" onclick="closeModal()">✕</button>
+      <div class="modal-title" id="sub-modal-title">新增訂閱</div>
+      <button class="modal-close" onclick="closeModal('sub-overlay')">✕</button>
     </div>
     <div class="modal-body">
       <input type="hidden" id="edit-id">
-
       <div class="form-group">
         <label class="form-label">服務圖示</label>
         <div class="emoji-grid" id="emoji-grid"></div>
       </div>
-
       <div class="form-group">
         <label class="form-label">顏色</label>
         <div class="color-grid" id="color-grid"></div>
       </div>
-
       <div class="form-group">
         <label class="form-label">服務名稱</label>
         <input class="form-input" id="f-name" placeholder="例：Netflix" type="text">
       </div>
-
       <div class="form-row">
         <div class="form-group">
           <label class="form-label">金額</label>
@@ -1000,405 +1307,499 @@
           </select>
         </div>
       </div>
-
       <div class="form-group">
         <label class="form-label">下次扣款日</label>
         <input class="form-input" id="f-date" type="date">
       </div>
-
       <div class="form-group">
         <label class="form-label">備註（選填）</label>
         <input class="form-input" id="f-note" placeholder="備注..." type="text">
       </div>
+      <button class="btn btn-primary ripple-wrap" onclick="saveSub()">儲存</button>
+      <button class="btn btn-danger ripple-wrap" id="delete-sub-btn" onclick="deleteSub()" style="display:none">刪除訂閱</button>
+      <button class="btn btn-ghost ripple-wrap" onclick="closeModal('sub-overlay')">取消</button>
+    </div>
+  </div>
+</div>
 
-      <button class="btn btn-primary" onclick="saveSub()">儲存</button>
-      <button class="btn btn-danger" id="delete-btn" onclick="deleteSub()" style="display:none">刪除訂閱</button>
-      <button class="btn btn-ghost" onclick="closeModal()">取消</button>
+<!-- Wishlist Modal -->
+<div class="modal-overlay" id="wish-overlay" onclick="closeModalOutside(event,'wish-overlay')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <div class="modal-title" id="wish-modal-title">新增願望商品</div>
+      <button class="modal-close" onclick="closeModal('wish-overlay')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="wish-edit-id">
+      <div class="form-group">
+        <label class="form-label">商品名稱</label>
+        <input class="form-input" id="w-name" placeholder="例：AirPods Pro" type="text">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">預期價格</label>
+          <input class="form-input" id="w-price" placeholder="0" type="number" min="0" step="0.01">
+        </div>
+        <div class="form-group">
+          <label class="form-label">分類</label>
+          <select class="form-input" id="w-cat">
+            <option value="科技">科技</option>
+            <option value="服飾">服飾</option>
+            <option value="居家">居家</option>
+            <option value="美妝">美妝</option>
+            <option value="書籍">書籍</option>
+            <option value="餐飲">餐飲</option>
+            <option value="娛樂">娛樂</option>
+            <option value="旅遊">旅遊</option>
+            <option value="健康">健康</option>
+            <option value="其他">其他</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">購買平台（選填）</label>
+        <input class="form-input" id="w-platform" placeholder="例：Apple Store、蝦皮" type="text">
+      </div>
+      <div class="form-group">
+        <label class="form-label">購買連結（選填）</label>
+        <input class="form-input" id="w-link" placeholder="https://..." type="url">
+      </div>
+      <div class="form-group">
+        <label class="form-label">備註（選填）</label>
+        <input class="form-input" id="w-note" placeholder="任何備注..." type="text">
+      </div>
+      <button class="btn btn-primary ripple-wrap" onclick="saveWish()">儲存</button>
+      <button class="btn btn-danger ripple-wrap" id="delete-wish-btn" onclick="deleteWish()" style="display:none">刪除商品</button>
+      <button class="btn btn-ghost ripple-wrap" onclick="closeModal('wish-overlay')">取消</button>
     </div>
   </div>
 </div>
 
 <script>
-// ===================== Data =====================
-const EMOJIS = ['📺','🎵','🎮','☁️','📧','💼','🏋️','📚','🛡️','🎯','💳','🛒','📱','🎬','🔐','🌐','🏠','✈️','🎨','💊','🐶','🎤','🖥️','⚡'];
-const COLORS = ['#7c6cfc','#f87171','#34d399','#fbbf24','#60a5fa','#f472b6','#a78bfa','#fb923c','#2dd4bf','#818cf8'];
-const CYCLE_LABELS = { monthly:'每月', yearly:'每年', weekly:'每週', quarterly:'每季' };
+// ===== CONSTANTS =====
+const EMOJIS = ['📺','🎵','🎮','☁️','📧','💼','🏋️','📚','🛡️','🎯','💳','🛒','📱','🎬','🔐','🌐','🏠','✈️','🎨','💊','🐶','🎤','🖥️','⚡','🎧','🍔','🎪','🚗'];
+const COLORS = ['#8b7cf6','#f87171','#34d399','#fbbf24','#60a5fa','#f472b6','#a78bfa','#fb923c','#2dd4bf','#818cf8'];
+const CYCLE = { monthly:'每月', yearly:'每年', weekly:'每週', quarterly:'每季' };
+const CAT_EMOJI = { 科技:'💻', 服飾:'👗', 居家:'🏠', 美妝:'💄', 書籍:'📚', 餐飲:'🍽️', 娛樂:'🎬', 旅遊:'✈️', 健康:'💊', 其他:'📦' };
 
-let subs = JSON.parse(localStorage.getItem('subtrack_subs') || '[]');
-let settings = JSON.parse(localStorage.getItem('subtrack_settings') || '{"theme":"dark","currency":"$","notify":true}');
-
-let selectedEmoji = EMOJIS[0];
-let selectedColor = COLORS[0];
+// ===== STATE =====
+let subs = JSON.parse(localStorage.getItem('st_subs') || '[]');
+let wishes = JSON.parse(localStorage.getItem('st_wishes') || '[]');
+let settings = JSON.parse(localStorage.getItem('st_settings') || '{"theme":"dark","currency":"$","notify":true}');
+let selEmoji = EMOJIS[0], selColor = COLORS[0];
 let currentPage = 'home';
-let calYear, calMonth;
+let calY, calM;
+let deferredPrompt = null;
 
 const now = new Date();
-calYear = now.getFullYear();
-calMonth = now.getMonth();
+calY = now.getFullYear(); calM = now.getMonth();
 
-// ===================== Init =====================
+// ===== PWA INSTALL =====
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredPrompt = e;
+  // Show banner after 3 seconds of interaction
+  setTimeout(() => showInstallBanner(), 3000);
+  document.getElementById('settings-install-btn').disabled = false;
+});
+
+window.addEventListener('appinstalled', () => {
+  hideInstallBanner();
+  deferredPrompt = null;
+});
+
+function showInstallBanner() {
+  if (deferredPrompt) document.getElementById('install-banner').classList.add('visible');
+}
+
+function hideInstallBanner() {
+  document.getElementById('install-banner').classList.remove('visible');
+}
+
+function dismissInstall() {
+  hideInstallBanner();
+}
+
+async function triggerInstall() {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    deferredPrompt = null;
+    hideInstallBanner();
+  }
+}
+
+document.getElementById('install-btn').addEventListener('click', triggerInstall);
+
+// Detect iOS for hint
+const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+const isStandalone = window.navigator.standalone;
+if (isIOS && !isStandalone) {
+  document.getElementById('ios-hint').style.display = 'block';
+  document.getElementById('settings-install-btn').style.display = 'none';
+}
+
+// ===== RIPPLE EFFECT =====
+document.addEventListener('click', e => {
+  const el = e.target.closest('.ripple-wrap');
+  if (!el) return;
+  const r = document.createElement('div');
+  r.className = 'ripple';
+  const rect = el.getBoundingClientRect();
+  const size = Math.max(rect.width, rect.height);
+  r.style.cssText = `width:${size}px;height:${size}px;left:${e.clientX-rect.left-size/2}px;top:${e.clientY-rect.top-size/2}px`;
+  el.appendChild(r);
+  r.addEventListener('animationend', () => r.remove());
+});
+
+// ===== INIT =====
 function init() {
   applyTheme(settings.theme);
   document.getElementById('today-date').textContent = now.toLocaleDateString('zh-TW', {year:'numeric',month:'long',day:'numeric',weekday:'short'});
   document.getElementById('currency-select').value = settings.currency;
-
-  buildEmojiGrid();
-  buildColorGrid();
-  renderAll();
-  initCalendar();
-  registerSW();
+  document.getElementById('currency-select').addEventListener('change', e => { settings.currency = e.target.value; saveSettings(); renderAll(); });
+  buildEmojiGrid(); buildColorGrid();
+  renderAll(); initCalendar();
+  // Init nav indicator position after layout
+  requestAnimationFrame(() => moveNavIndicator('home'));
+  if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
 }
 
-function registerSW() {
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js').catch(() => {});
-  }
-}
-
-// ===================== Navigation =====================
+// ===== NAVIGATION =====
 function goPage(name) {
   if (currentPage === name) return;
-
-  // Remove active from all pages and nav buttons
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-
-  // Activate new
   document.getElementById('page-' + name).classList.add('active');
   document.getElementById('nav-' + name).classList.add('active');
   currentPage = name;
+  moveNavIndicator(name);
 
-  // Render page content
+  const fab = document.getElementById('fab');
+  fab.style.display = (name === 'settings' || name === 'analytics') ? 'none' : 'flex';
+
   if (name === 'calendar') renderCalendar();
   if (name === 'analytics') renderAnalytics();
+  if (name === 'wishlist') renderWishlist();
   if (name === 'home') renderHome();
 }
 
-// ===================== Theme =====================
+function moveNavIndicator(name) {
+  const btn = document.getElementById('nav-' + name);
+  const indicator = document.getElementById('nav-indicator');
+  const nav = document.getElementById('nav');
+  if (!btn || !indicator) return;
+  const navRect = nav.getBoundingClientRect();
+  const btnRect = btn.getBoundingClientRect();
+  indicator.style.left = (btnRect.left - navRect.left) + 'px';
+  indicator.style.width = btnRect.width + 'px';
+}
+
+// ===== THEME =====
 function applyTheme(theme) {
   document.documentElement.setAttribute('data-theme', theme === 'light' ? 'light' : '');
-  settings.theme = theme;
-  saveSettings();
-
+  settings.theme = theme; saveSettings();
   const pill = document.getElementById('theme-pill');
-  const dLabel = document.getElementById('theme-dark-label');
-  const lLabel = document.getElementById('theme-light-label');
-
+  const dl = document.getElementById('theme-dark-lbl');
+  const ll = document.getElementById('theme-light-lbl');
   if (theme === 'light') {
-    pill.classList.add('light-mode');
-    dLabel.classList.remove('active');
-    lLabel.classList.add('active');
-    document.getElementById('theme-meta').content = '#f4f4f8';
+    pill.classList.add('light');
+    dl.classList.remove('active'); ll.classList.add('active');
   } else {
-    pill.classList.remove('light-mode');
-    dLabel.classList.add('active');
-    lLabel.classList.remove('active');
-    document.getElementById('theme-meta').content = '#0f0f13';
+    pill.classList.remove('light');
+    dl.classList.add('active'); ll.classList.remove('active');
   }
 }
 
-function toggleTheme() {
-  applyTheme(settings.theme === 'dark' ? 'light' : 'dark');
-}
+function toggleTheme() { applyTheme(settings.theme === 'dark' ? 'light' : 'dark'); }
 
-// ===================== Settings =====================
-function toggleSetting(el) {
-  el.classList.toggle('on');
-  settings.notify = el.classList.contains('on');
-  saveSettings();
-}
-
-function saveSettings() {
-  localStorage.setItem('subtrack_settings', JSON.stringify(settings));
-}
-
-document.getElementById('currency-select').addEventListener('change', e => {
-  settings.currency = e.target.value;
-  saveSettings();
-  renderAll();
-});
+function saveSettings() { localStorage.setItem('st_settings', JSON.stringify(settings)); }
 
 function clearAllData() {
-  if (!confirm('確定要清除所有訂閱資料？此操作無法復原。')) return;
-  subs = [];
-  saveSubs();
+  if (!confirm('確定清除所有訂閱和願望清單資料？')) return;
+  subs = []; wishes = [];
+  localStorage.removeItem('st_subs'); localStorage.removeItem('st_wishes');
   renderAll();
 }
 
-// ===================== Calculations =====================
+// ===== CALCULATIONS =====
 function toMonthly(sub) {
   const p = parseFloat(sub.price) || 0;
-  if (sub.cycle === 'yearly') return p / 12;
-  if (sub.cycle === 'weekly') return p * 4.33;
-  if (sub.cycle === 'quarterly') return p / 3;
+  if (sub.cycle === 'yearly') return p/12;
+  if (sub.cycle === 'weekly') return p*4.33;
+  if (sub.cycle === 'quarterly') return p/3;
   return p;
 }
 
 function daysUntil(dateStr) {
-  const d = new Date(dateStr);
-  const diff = d - new Date();
-  return Math.ceil(diff / 86400000);
+  const d = new Date(dateStr); d.setHours(0,0,0,0);
+  const t = new Date(); t.setHours(0,0,0,0);
+  return Math.ceil((d-t)/86400000);
 }
 
 function getBadge(days) {
   if (days < 0) return '<span class="badge badge-red">已到期</span>';
   if (days <= 3) return '<span class="badge badge-red">緊急</span>';
-  if (days <= 7) return '<span class="badge badge-yellow">' + days + '天後</span>';
+  if (days <= 7) return '<span class="badge badge-yellow">'+days+'天後</span>';
   return '<span class="badge badge-green">正常</span>';
 }
 
-// ===================== Render =====================
+// ===== RENDER ALL =====
 function renderAll() {
   renderHome();
   if (currentPage === 'analytics') renderAnalytics();
   if (currentPage === 'calendar') renderCalendar();
+  if (currentPage === 'wishlist') renderWishlist();
 }
 
 function renderHome() {
   const cur = settings.currency;
   const monthly = subs.reduce((s,sub) => s + toMonthly(sub), 0);
-  const upcoming = subs.filter(s => { const d = daysUntil(s.nextDate); return d >= 0 && d <= 7; }).length;
+  const upcoming7 = subs.filter(s => { const d=daysUntil(s.nextDate); return d>=0&&d<=7; });
 
   document.getElementById('stat-monthly').textContent = cur + monthly.toFixed(0);
-  document.getElementById('stat-yearly').textContent = '年均: ' + cur + (monthly * 12).toFixed(0);
+  document.getElementById('stat-yearly').textContent = '年均: ' + cur + (monthly*12).toFixed(0);
   document.getElementById('stat-active').textContent = subs.length;
-  document.getElementById('stat-upcoming').textContent = upcoming;
+  document.getElementById('stat-upcoming').textContent = upcoming7.length;
 
-  const sorted = [...subs].sort((a,b) => daysUntil(a.nextDate) - daysUntil(b.nextDate));
-  const upcomingItems = sorted.filter(s => daysUntil(s.nextDate) <= 7 && daysUntil(s.nextDate) >= 0);
+  const sorted = [...subs].sort((a,b) => daysUntil(a.nextDate)-daysUntil(b.nextDate));
 
-  document.getElementById('upcoming-list').innerHTML = upcomingItems.length
-    ? upcomingItems.map(subCard).join('')
-    : '<div style="color:var(--text3);font-size:13px;padding:8px 0">無即將扣款項目</div>';
+  document.getElementById('upcoming-list').innerHTML = upcoming7.length
+    ? upcoming7.sort((a,b)=>daysUntil(a.nextDate)-daysUntil(b.nextDate)).map(subCard).join('')
+    : '<div style="color:var(--text-3);font-size:12px;padding:6px 0">無即將扣款項目</div>';
 
   document.getElementById('all-list').innerHTML = subs.length
     ? sorted.map(subCard).join('')
-    : emptyState();
+    : emptyState('還沒有訂閱','點擊右下角 + 按鈕新增');
 }
 
 function subCard(sub) {
   const days = daysUntil(sub.nextDate);
-  return `<div class="sub-card" onclick="openEditModal('${sub.id}')">
+  return `<div class="sub-card ripple-wrap" onclick="openEditSub('${sub.id}')">
     <div class="sub-icon" style="background:${sub.color}22">${sub.emoji}</div>
     <div class="sub-info">
-      <div class="sub-name">${sub.name}</div>
-      <div class="sub-meta">${CYCLE_LABELS[sub.cycle]} · ${sub.nextDate} ${getBadge(days)}</div>
+      <div class="sub-name">${esc(sub.name)}</div>
+      <div class="sub-meta">${CYCLE[sub.cycle]} · ${sub.nextDate} ${getBadge(days)}</div>
     </div>
     <div class="sub-price">${settings.currency}${parseFloat(sub.price).toFixed(0)}</div>
   </div>`;
 }
 
-function emptyState() {
+function emptyState(title, desc) {
   return `<div class="empty-state">
-    <div class="empty-icon">📭</div>
-    <div class="empty-title">還沒有訂閱</div>
-    <div class="empty-desc">點擊右下角 + 按鈕<br>新增第一個訂閱</div>
+    <div class="empty-icon-svg">${emptyIconSvg()}</div>
+    <div class="empty-title">${title}</div>
+    <div class="empty-desc">${desc}</div>
   </div>`;
 }
 
-// ===================== Calendar =====================
+function emptyIconSvg() {
+  return `<svg width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="var(--text-3)" stroke-width="1.2"><path stroke-linecap="round" stroke-linejoin="round" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/></svg>`;
+}
+
+function esc(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+// ===== CALENDAR =====
 function initCalendar() {
-  document.getElementById('cal-prev').onclick = () => { calMonth--; if (calMonth < 0) { calMonth = 11; calYear--; } renderCalendar(); };
-  document.getElementById('cal-next').onclick = () => { calMonth++; if (calMonth > 11) { calMonth = 0; calYear++; } renderCalendar(); };
+  document.getElementById('cal-prev').onclick = () => { calM--; if(calM<0){calM=11;calY--;} renderCalendar(); };
+  document.getElementById('cal-next').onclick = () => { calM++; if(calM>11){calM=0;calY++;} renderCalendar(); };
 }
 
 function renderCalendar() {
   const months = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
-  document.getElementById('cal-title').textContent = calYear + '年 ' + months[calMonth];
-
-  const firstDay = new Date(calYear, calMonth, 1).getDay();
-  const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
-  const today = new Date();
-
-  // Event dates
+  document.getElementById('cal-title').textContent = calY + '年 ' + months[calM];
+  const firstDay = new Date(calY,calM,1).getDay();
+  const daysInM = new Date(calY,calM+1,0).getDate();
+  const t = new Date();
   const eventDays = new Set();
-  subs.forEach(sub => {
-    const d = new Date(sub.nextDate);
-    if (d.getFullYear() === calYear && d.getMonth() === calMonth) {
-      eventDays.add(d.getDate());
-    }
-  });
+  subs.forEach(s => { const d=new Date(s.nextDate); if(d.getFullYear()===calY&&d.getMonth()===calM) eventDays.add(d.getDate()); });
 
-  let html = ['日','一','二','三','四','五','六'].map(d => `<div class="cal-day-label">${d}</div>`).join('');
-  for (let i = 0; i < firstDay; i++) html += '<div></div>';
-  for (let d = 1; d <= daysInMonth; d++) {
-    const isToday = today.getFullYear() === calYear && today.getMonth() === calMonth && today.getDate() === d;
-    const hasEvent = eventDays.has(d);
-    html += `<div class="cal-day ${isToday ? 'today' : ''} ${hasEvent ? 'has-event' : ''}">${d}</div>`;
+  let html = ['日','一','二','三','四','五','六'].map(d=>`<div class="cal-day-label">${d}</div>`).join('');
+  for(let i=0;i<firstDay;i++) html+='<div></div>';
+  for(let d=1;d<=daysInM;d++) {
+    const isToday = t.getFullYear()===calY&&t.getMonth()===calM&&t.getDate()===d;
+    html+=`<div class="cal-day ${isToday?'today':''} ${eventDays.has(d)?'has-event':''}">${d}</div>`;
   }
-
   document.getElementById('cal-grid').innerHTML = html;
 
-  // Events list
-  const monthSubs = subs.filter(sub => {
-    const d = new Date(sub.nextDate);
-    return d.getFullYear() === calYear && d.getMonth() === calMonth;
-  }).sort((a,b) => new Date(a.nextDate) - new Date(b.nextDate));
-
-  document.getElementById('cal-events').innerHTML = monthSubs.length
-    ? monthSubs.map(subCard).join('')
-    : '<div style="color:var(--text3);font-size:13px;padding:8px 0">本月無到期訂閱</div>';
+  const monthSubs = subs.filter(s=>{ const d=new Date(s.nextDate); return d.getFullYear()===calY&&d.getMonth()===calM; }).sort((a,b)=>new Date(a.nextDate)-new Date(b.nextDate));
+  document.getElementById('cal-events').innerHTML = monthSubs.length ? monthSubs.map(subCard).join('') : '<div style="color:var(--text-3);font-size:12px;padding:6px 0">本月無到期訂閱</div>';
 }
 
-// ===================== Analytics =====================
+// ===== ANALYTICS =====
 function renderAnalytics() {
   const cur = settings.currency;
-  const monthly = subs.reduce((s,sub) => s + toMonthly(sub), 0);
-
-  document.getElementById('ana-daily').textContent = cur + (monthly / 30).toFixed(1);
+  const monthly = subs.reduce((s,sub)=>s+toMonthly(sub),0);
+  document.getElementById('ana-daily').textContent = cur + (monthly/30).toFixed(1);
   document.getElementById('ana-count').textContent = subs.length;
 
-  // Bar chart (6 months)
   const bars = [];
-  for (let i = 5; i >= 0; i--) {
-    const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+  for(let i=5;i>=0;i--) {
+    const d = new Date(now.getFullYear(), now.getMonth()-i, 1);
     const m = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()];
-    bars.push({ label: m, value: monthly + (Math.random() * monthly * 0.3 - monthly * 0.15) });
+    bars.push({ label:m, value: i===0 ? monthly : monthly*(0.75+Math.random()*0.5) });
   }
-  bars[bars.length - 1].value = monthly;
-
-  const max = Math.max(...bars.map(b => b.value), 1);
-  document.getElementById('bar-chart').innerHTML = bars.map((b, i) =>
-    `<div class="bar-item">
-      <div class="bar ${i === bars.length-1 ? 'current' : ''}" style="height:${(b.value/max*100)}%"></div>
-      <div class="bar-label">${b.label}</div>
-    </div>`
+  const max = Math.max(...bars.map(b=>b.value), 1);
+  document.getElementById('bar-chart').innerHTML = bars.map((b,i)=>
+    `<div class="bar-item"><div class="bar ${i===bars.length-1?'current':''}" style="height:${(b.value/max*100)}%"></div><div class="bar-label">${b.label}</div></div>`
   ).join('');
 
-  // Sorted list
-  const sorted = [...subs].sort((a,b) => toMonthly(b) - toMonthly(a));
-  document.getElementById('ana-list').innerHTML = sorted.length
-    ? sorted.map(subCard).join('')
-    : emptyState();
+  const sorted = [...subs].sort((a,b)=>toMonthly(b)-toMonthly(a));
+  document.getElementById('ana-list').innerHTML = sorted.length ? sorted.map(subCard).join('') : emptyState('尚無資料','先新增訂閱項目');
 }
 
-// ===================== Modal =====================
-function openAddModal() {
-  selectedEmoji = EMOJIS[0];
-  selectedColor = COLORS[0];
+// ===== WISHLIST =====
+function renderWishlist() {
+  const cur = settings.currency;
+  const total = wishes.reduce((s,w)=>s+(parseFloat(w.price)||0),0);
+  document.getElementById('wish-total').textContent = cur + total.toFixed(0);
+  document.getElementById('wish-count').textContent = '共 ' + wishes.length + ' 件商品';
+
+  document.getElementById('wish-list').innerHTML = wishes.length
+    ? wishes.map(wishCard).join('')
+    : emptyState('願望清單是空的','記錄你想買的商品');
+}
+
+function wishCard(w) {
+  const linkHTML = w.link
+    ? `<a class="wish-link" href="${esc(w.link)}" target="_blank" onclick="event.stopPropagation()">🔗 ${esc(w.platform||'連結')}</a>`
+    : (w.platform ? `<span class="wish-cat-tag">${esc(w.platform)}</span>` : '');
+  return `<div class="wish-card ripple-wrap" onclick="openEditWish('${w.id}')">
+    <div class="sub-icon" style="background:rgba(244,114,182,0.12);font-size:22px">${CAT_EMOJI[w.cat]||'📦'}</div>
+    <div class="sub-info">
+      <div class="sub-name">${esc(w.name)}</div>
+      <div class="sub-meta" style="display:flex;align-items:center;gap:6px;margin-top:4px">
+        <span class="wish-cat-tag">${esc(w.cat)}</span>
+        ${linkHTML}
+      </div>
+    </div>
+    <div class="sub-price">${settings.currency}${parseFloat(w.price).toFixed(0)}</div>
+  </div>`;
+}
+
+// ===== FAB ROUTER =====
+function openFab() {
+  if (currentPage === 'wishlist') openAddWish();
+  else openAddSub();
+}
+
+// ===== SUBSCRIPTION MODAL =====
+function openAddSub() {
+  selEmoji = EMOJIS[0]; selColor = COLORS[0];
   document.getElementById('edit-id').value = '';
-  document.getElementById('modal-title').textContent = '新增訂閱';
+  document.getElementById('sub-modal-title').textContent = '新增訂閱';
   document.getElementById('f-name').value = '';
   document.getElementById('f-price').value = '';
   document.getElementById('f-cycle').value = 'monthly';
   document.getElementById('f-date').value = new Date().toISOString().split('T')[0];
   document.getElementById('f-note').value = '';
-  document.getElementById('delete-btn').style.display = 'none';
-  updateEmojiGrid();
-  updateColorGrid();
-  document.getElementById('modal-overlay').classList.add('open');
+  document.getElementById('delete-sub-btn').style.display = 'none';
+  updateEmojiGrid(); updateColorGrid();
+  document.getElementById('sub-overlay').classList.add('open');
 }
 
-function openEditModal(id) {
-  const sub = subs.find(s => s.id === id);
-  if (!sub) return;
-  selectedEmoji = sub.emoji;
-  selectedColor = sub.color;
+function openEditSub(id) {
+  const sub = subs.find(s=>s.id===id); if(!sub) return;
+  selEmoji = sub.emoji; selColor = sub.color;
   document.getElementById('edit-id').value = id;
-  document.getElementById('modal-title').textContent = '編輯訂閱';
+  document.getElementById('sub-modal-title').textContent = '編輯訂閱';
   document.getElementById('f-name').value = sub.name;
   document.getElementById('f-price').value = sub.price;
   document.getElementById('f-cycle').value = sub.cycle;
   document.getElementById('f-date').value = sub.nextDate;
   document.getElementById('f-note').value = sub.note || '';
-  document.getElementById('delete-btn').style.display = 'block';
-  updateEmojiGrid();
-  updateColorGrid();
-  document.getElementById('modal-overlay').classList.add('open');
-}
-
-function closeModal() {
-  document.getElementById('modal-overlay').classList.remove('open');
-}
-
-function closeModalOutside(e) {
-  if (e.target === document.getElementById('modal-overlay')) closeModal();
+  document.getElementById('delete-sub-btn').style.display = 'block';
+  updateEmojiGrid(); updateColorGrid();
+  document.getElementById('sub-overlay').classList.add('open');
 }
 
 function saveSub() {
   const name = document.getElementById('f-name').value.trim();
   const price = document.getElementById('f-price').value;
-  const cycle = document.getElementById('f-cycle').value;
   const date = document.getElementById('f-date').value;
-
-  if (!name || !price || !date) {
-    alert('請填寫名稱、金額及日期');
-    return;
-  }
-
+  if(!name||!price||!date) { alert('請填寫名稱、金額及日期'); return; }
   const id = document.getElementById('edit-id').value;
-  const sub = {
-    id: id || Date.now().toString(),
-    name,
-    price: parseFloat(price),
-    cycle,
-    nextDate: date,
-    emoji: selectedEmoji,
-    color: selectedColor,
-    note: document.getElementById('f-note').value
-  };
-
-  if (id) {
-    const idx = subs.findIndex(s => s.id === id);
-    subs[idx] = sub;
-  } else {
-    subs.push(sub);
-  }
-
-  saveSubs();
-  renderAll();
-  closeModal();
+  const sub = { id: id||Date.now().toString(), name, price:parseFloat(price), cycle:document.getElementById('f-cycle').value, nextDate:date, emoji:selEmoji, color:selColor, note:document.getElementById('f-note').value };
+  if(id) { const idx=subs.findIndex(s=>s.id===id); subs[idx]=sub; } else subs.push(sub);
+  saveSubs(); renderAll(); closeModal('sub-overlay');
 }
 
 function deleteSub() {
   const id = document.getElementById('edit-id').value;
-  if (!id || !confirm('確定刪除此訂閱？')) return;
-  subs = subs.filter(s => s.id !== id);
-  saveSubs();
-  renderAll();
-  closeModal();
+  if(!id||!confirm('確定刪除？')) return;
+  subs = subs.filter(s=>s.id!==id);
+  saveSubs(); renderAll(); closeModal('sub-overlay');
 }
 
-function saveSubs() {
-  localStorage.setItem('subtrack_subs', JSON.stringify(subs));
+function saveSubs() { localStorage.setItem('st_subs', JSON.stringify(subs)); }
+
+// ===== WISHLIST MODAL =====
+function openAddWish() {
+  document.getElementById('wish-edit-id').value = '';
+  document.getElementById('wish-modal-title').textContent = '新增願望商品';
+  document.getElementById('w-name').value = '';
+  document.getElementById('w-price').value = '';
+  document.getElementById('w-cat').value = '科技';
+  document.getElementById('w-platform').value = '';
+  document.getElementById('w-link').value = '';
+  document.getElementById('w-note').value = '';
+  document.getElementById('delete-wish-btn').style.display = 'none';
+  document.getElementById('wish-overlay').classList.add('open');
 }
 
-// ===================== Emoji & Color Grids =====================
+function openEditWish(id) {
+  const w = wishes.find(x=>x.id===id); if(!w) return;
+  document.getElementById('wish-edit-id').value = id;
+  document.getElementById('wish-modal-title').textContent = '編輯商品';
+  document.getElementById('w-name').value = w.name;
+  document.getElementById('w-price').value = w.price;
+  document.getElementById('w-cat').value = w.cat;
+  document.getElementById('w-platform').value = w.platform||'';
+  document.getElementById('w-link').value = w.link||'';
+  document.getElementById('w-note').value = w.note||'';
+  document.getElementById('delete-wish-btn').style.display = 'block';
+  document.getElementById('wish-overlay').classList.add('open');
+}
+
+function saveWish() {
+  const name = document.getElementById('w-name').value.trim();
+  const price = document.getElementById('w-price').value;
+  if(!name||!price) { alert('請填寫商品名稱及價格'); return; }
+  const id = document.getElementById('wish-edit-id').value;
+  const w = { id:id||Date.now().toString(), name, price:parseFloat(price), cat:document.getElementById('w-cat').value, platform:document.getElementById('w-platform').value, link:document.getElementById('w-link').value, note:document.getElementById('w-note').value };
+  if(id) { const idx=wishes.findIndex(x=>x.id===id); wishes[idx]=w; } else wishes.push(w);
+  saveWishes(); renderWishlist(); closeModal('wish-overlay');
+}
+
+function deleteWish() {
+  const id = document.getElementById('wish-edit-id').value;
+  if(!id||!confirm('確定刪除？')) return;
+  wishes = wishes.filter(x=>x.id!==id);
+  saveWishes(); renderWishlist(); closeModal('wish-overlay');
+}
+
+function saveWishes() { localStorage.setItem('st_wishes', JSON.stringify(wishes)); }
+
+// ===== MODAL HELPERS =====
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+function closeModalOutside(e, id) { if(e.target.id===id) closeModal(id); }
+
+// ===== EMOJI & COLOR =====
 function buildEmojiGrid() {
-  document.getElementById('emoji-grid').innerHTML = EMOJIS.map(e =>
-    `<button class="emoji-btn" onclick="selectEmoji('${e}')">${e}</button>`
-  ).join('');
+  document.getElementById('emoji-grid').innerHTML = EMOJIS.map((e,i)=>`<button class="emoji-btn" onclick="selEmoji='${e}';updateEmojiGrid()">${e}</button>`).join('');
 }
-
 function buildColorGrid() {
-  document.getElementById('color-grid').innerHTML = COLORS.map(c =>
-    `<div class="color-dot" style="background:${c}" onclick="selectColor('${c}')"></div>`
-  ).join('');
+  document.getElementById('color-grid').innerHTML = COLORS.map(c=>`<div class="color-dot" style="background:${c}" onclick="selColor='${c}';updateColorGrid()"></div>`).join('');
 }
-
-function selectEmoji(e) {
-  selectedEmoji = e;
-  updateEmojiGrid();
-}
-
-function selectColor(c) {
-  selectedColor = c;
-  updateColorGrid();
-}
-
 function updateEmojiGrid() {
-  document.querySelectorAll('.emoji-btn').forEach((btn, i) => {
-    btn.classList.toggle('selected', EMOJIS[i] === selectedEmoji);
-  });
+  document.querySelectorAll('.emoji-btn').forEach((b,i)=>b.classList.toggle('selected',EMOJIS[i]===selEmoji));
 }
-
 function updateColorGrid() {
-  document.querySelectorAll('.color-dot').forEach((dot, i) => {
-    dot.classList.toggle('selected', COLORS[i] === selectedColor);
-  });
+  document.querySelectorAll('.color-dot').forEach((d,i)=>d.classList.toggle('selected',COLORS[i]===selColor));
 }
 
-// ===================== Start =====================
+// ===== START =====
 init();
 </script>
 </body>
