@@ -1,0 +1,1405 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#0f0f13" id="theme-meta">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="SubTrack">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon-192.svg">
+  <link rel="apple-touch-icon" href="icon-192.svg">
+  <title>SubTrack</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    /* ========== CSS Variables ========== */
+    :root {
+      --bg: #0f0f13;
+      --bg2: #17171e;
+      --bg3: #1e1e28;
+      --surface: #22222f;
+      --surface2: #2a2a3a;
+      --border: rgba(255,255,255,0.07);
+      --text: #f0f0f5;
+      --text2: #9898b0;
+      --text3: #5a5a70;
+      --accent: #7c6cfc;
+      --accent2: #a78bfa;
+      --accent-glow: rgba(124,108,252,0.3);
+      --green: #34d399;
+      --yellow: #fbbf24;
+      --red: #f87171;
+      --nav-h: 68px;
+      --radius: 16px;
+      --radius-sm: 10px;
+      --transition: 0.28s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    [data-theme="light"] {
+      --bg: #f4f4f8;
+      --bg2: #eaeaf0;
+      --bg3: #e0e0ea;
+      --surface: #ffffff;
+      --surface2: #f0f0f8;
+      --border: rgba(0,0,0,0.07);
+      --text: #12121a;
+      --text2: #5a5a75;
+      --text3: #9898b0;
+      --accent: #6c5ce7;
+      --accent2: #8b7cf6;
+      --accent-glow: rgba(108,92,231,0.2);
+    }
+
+    /* ========== Reset & Base ========== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { height: 100%; font-size: 16px; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      height: 100%;
+      overflow: hidden;
+      -webkit-font-smoothing: antialiased;
+      transition: background var(--transition), color var(--transition);
+    }
+
+    /* ========== App Shell ========== */
+    #app {
+      height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* ========== Page Container ========== */
+    #pages {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .page {
+      position: absolute;
+      inset: 0;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 24px 20px calc(var(--nav-h) + 24px);
+      opacity: 0;
+      transform: translateY(12px);
+      pointer-events: none;
+      transition: opacity 0.25s ease, transform 0.25s ease;
+      will-change: opacity, transform;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .page.active {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: all;
+    }
+
+    /* ========== Bottom Nav ========== */
+    #nav {
+      height: var(--nav-h);
+      background: var(--bg2);
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      padding-bottom: env(safe-area-inset-bottom);
+      flex-shrink: 0;
+      position: relative;
+      z-index: 100;
+      backdrop-filter: blur(20px);
+      transition: background var(--transition), border-color var(--transition);
+    }
+
+    .nav-btn {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 8px 0;
+      cursor: pointer;
+      background: none;
+      border: none;
+      color: var(--text3);
+      transition: color var(--transition);
+      position: relative;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .nav-btn.active { color: var(--accent); }
+
+    .nav-btn svg {
+      width: 22px;
+      height: 22px;
+      transition: transform 0.2s ease;
+    }
+
+    .nav-btn.active svg { transform: scale(1.1); }
+
+    .nav-btn span {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.3px;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .nav-indicator {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%) scaleX(0);
+      width: 24px;
+      height: 2px;
+      background: var(--accent);
+      border-radius: 2px;
+      transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
+    }
+
+    .nav-btn.active .nav-indicator { transform: translateX(-50%) scaleX(1); }
+
+    /* ========== Header ========== */
+    .page-header {
+      margin-bottom: 24px;
+    }
+
+    .page-header h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -0.5px;
+    }
+
+    .page-header p {
+      font-size: 13px;
+      color: var(--text2);
+      margin-top: 4px;
+    }
+
+    /* ========== Dashboard ========== */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 16px;
+      transition: background var(--transition), border-color var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card.main {
+      grid-column: 1 / -1;
+      background: linear-gradient(135deg, var(--accent) 0%, #a78bfa 100%);
+      border: none;
+    }
+
+    .stat-card.main .stat-label { color: rgba(255,255,255,0.7); }
+    .stat-card.main .stat-value { color: #fff; }
+    .stat-card.main .stat-sub { color: rgba(255,255,255,0.6); }
+
+    .stat-label {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text2);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 8px;
+      transition: color var(--transition);
+    }
+
+    .stat-value {
+      font-family: 'Syne', sans-serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1;
+      transition: color var(--transition);
+    }
+
+    .stat-value.big { font-size: 36px; }
+
+    .stat-sub {
+      font-size: 12px;
+      color: var(--text2);
+      margin-top: 6px;
+      transition: color var(--transition);
+    }
+
+    /* ========== Section Title ========== */
+    .section-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text2);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 14px;
+    }
+
+    /* ========== Subscription Cards ========== */
+    .sub-list { display: flex; flex-direction: column; gap: 10px; }
+
+    .sub-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      cursor: pointer;
+      transition: background var(--transition), border-color var(--transition), transform 0.15s ease, box-shadow 0.15s ease;
+      -webkit-tap-highlight-color: transparent;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .sub-card:active { transform: scale(0.98); }
+
+    .sub-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .sub-info { flex: 1; min-width: 0; }
+
+    .sub-name {
+      font-family: 'Syne', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      transition: color var(--transition);
+    }
+
+    .sub-meta {
+      font-size: 12px;
+      color: var(--text2);
+      margin-top: 3px;
+      transition: color var(--transition);
+    }
+
+    .sub-price {
+      font-family: 'Syne', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      flex-shrink: 0;
+      transition: color var(--transition);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      border-radius: 20px;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+
+    .badge-green { background: rgba(52,211,153,0.15); color: var(--green); }
+    .badge-yellow { background: rgba(251,191,36,0.15); color: var(--yellow); }
+    .badge-red { background: rgba(248,113,113,0.15); color: var(--red); }
+
+    /* ========== FAB ========== */
+    .fab {
+      position: fixed;
+      bottom: calc(var(--nav-h) + 20px);
+      right: 20px;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: none;
+      color: #fff;
+      font-size: 24px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 20px var(--accent-glow);
+      z-index: 50;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .fab:active { transform: scale(0.92); box-shadow: 0 2px 10px var(--accent-glow); }
+
+    /* ========== Modal ========== */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 200;
+      display: flex;
+      align-items: flex-end;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+      backdrop-filter: blur(4px);
+    }
+
+    .modal-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .modal {
+      width: 100%;
+      max-height: 92dvh;
+      background: var(--bg2);
+      border-radius: 24px 24px 0 0;
+      overflow: hidden;
+      transform: translateY(100%);
+      transition: transform 0.3s cubic-bezier(0.34,1.2,0.64,1);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .modal-overlay.open .modal {
+      transform: translateY(0);
+    }
+
+    .modal-handle {
+      width: 36px;
+      height: 4px;
+      background: var(--border);
+      border-radius: 2px;
+      margin: 12px auto 0;
+      flex-shrink: 0;
+    }
+
+    .modal-header {
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .modal-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .modal-close {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--surface);
+      border: none;
+      color: var(--text2);
+      font-size: 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .modal-body {
+      padding: 20px;
+      overflow-y: auto;
+      flex: 1;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* ========== Form ========== */
+    .form-group { margin-bottom: 18px; }
+
+    .form-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text2);
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+      margin-bottom: 8px;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 13px 16px;
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      font-size: 15px;
+      font-family: 'DM Sans', sans-serif;
+      outline: none;
+      transition: border-color 0.2s ease, background var(--transition);
+      -webkit-appearance: none;
+    }
+
+    .form-input:focus { border-color: var(--accent); }
+
+    select.form-input { cursor: pointer; }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+    .btn {
+      width: 100%;
+      padding: 15px;
+      border-radius: var(--radius-sm);
+      font-size: 15px;
+      font-weight: 600;
+      font-family: 'Syne', sans-serif;
+      cursor: pointer;
+      border: none;
+      transition: opacity 0.2s, transform 0.15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .btn:active { transform: scale(0.97); opacity: 0.85; }
+
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-danger { background: var(--red); color: #fff; margin-top: 10px; }
+    .btn-ghost { background: var(--surface); color: var(--text2); margin-top: 10px; border: 1px solid var(--border); }
+
+    /* ========== Emoji Picker ========== */
+    .emoji-grid {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 6px;
+      max-height: 160px;
+      overflow-y: auto;
+    }
+
+    .emoji-btn {
+      aspect-ratio: 1;
+      border: none;
+      background: var(--surface);
+      border-radius: 8px;
+      font-size: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s ease, transform 0.1s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .emoji-btn:active { transform: scale(0.88); }
+    .emoji-btn.selected { background: var(--accent); }
+
+    /* ========== Color Picker ========== */
+    .color-grid {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .color-dot {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: transform 0.15s, border-color 0.15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .color-dot.selected { border-color: var(--text); transform: scale(1.15); }
+
+    /* ========== Calendar Page ========== */
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+      margin-bottom: 24px;
+    }
+
+    .cal-day-label {
+      text-align: center;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text3);
+      padding: 6px 0;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .cal-day {
+      aspect-ratio: 1;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      color: var(--text2);
+      position: relative;
+      cursor: default;
+    }
+
+    .cal-day.today {
+      background: var(--accent);
+      color: #fff;
+      font-weight: 700;
+    }
+
+    .cal-day.has-event::after {
+      content: '';
+      position: absolute;
+      bottom: 3px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--accent2);
+    }
+
+    .cal-day.today::after { background: rgba(255,255,255,0.7); }
+
+    .cal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .cal-nav {
+      background: var(--surface);
+      border: none;
+      color: var(--text);
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 16px;
+      -webkit-tap-highlight-color: transparent;
+      transition: background var(--transition);
+    }
+
+    .cal-month {
+      font-family: 'Syne', sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    /* ========== Settings ========== */
+    .settings-section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 20px;
+      overflow: hidden;
+      transition: background var(--transition), border-color var(--transition);
+    }
+
+    .settings-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--border);
+      transition: border-color var(--transition);
+    }
+
+    .settings-item:last-child { border-bottom: none; }
+
+    .settings-item-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .settings-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 17px;
+    }
+
+    .settings-label {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text);
+      transition: color var(--transition);
+    }
+
+    .settings-value {
+      font-size: 13px;
+      color: var(--text2);
+      transition: color var(--transition);
+    }
+
+    /* ========== Toggle Switch ========== */
+    .toggle-track {
+      width: 52px;
+      height: 28px;
+      background: var(--surface2);
+      border-radius: 14px;
+      position: relative;
+      cursor: pointer;
+      transition: background 0.25s ease;
+      flex-shrink: 0;
+      -webkit-tap-highlight-color: transparent;
+      border: 1.5px solid var(--border);
+    }
+
+    .toggle-track.on { background: var(--accent); border-color: var(--accent); }
+
+    .toggle-thumb {
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 20px;
+      height: 20px;
+      background: #fff;
+      border-radius: 50%;
+      transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+    }
+
+    .toggle-track.on .toggle-thumb { transform: translateX(24px); }
+
+    /* ========== Theme Slider ========== */
+    .theme-slider-wrap {
+      background: var(--bg3);
+      border-radius: 12px;
+      padding: 4px;
+      display: flex;
+      gap: 2px;
+      width: 120px;
+      position: relative;
+    }
+
+    .theme-slider-pill {
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      width: calc(50% - 4px);
+      height: calc(100% - 8px);
+      background: var(--accent);
+      border-radius: 9px;
+      transition: transform 0.3s cubic-bezier(0.34,1.2,0.64,1);
+      z-index: 0;
+    }
+
+    .theme-slider-pill.light-mode { transform: translateX(calc(100% + 2px)); }
+
+    .theme-option {
+      flex: 1;
+      padding: 6px 0;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text2);
+      cursor: pointer;
+      position: relative;
+      z-index: 1;
+      transition: color 0.2s ease;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    .theme-option.active { color: #fff; }
+
+    /* ========== Analytics ========== */
+    .chart-wrap {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 16px;
+      transition: background var(--transition), border-color var(--transition);
+    }
+
+    .chart-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text2);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 16px;
+    }
+
+    .bar-chart { display: flex; align-items: flex-end; gap: 6px; height: 80px; }
+
+    .bar-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+
+    .bar {
+      width: 100%;
+      border-radius: 4px 4px 0 0;
+      background: var(--accent);
+      opacity: 0.7;
+      min-height: 4px;
+      transition: opacity 0.2s, height 0.4s ease;
+    }
+
+    .bar.current { opacity: 1; }
+
+    .bar-label { font-size: 9px; color: var(--text3); }
+
+    /* ========== Empty State ========== */
+    .empty-state {
+      text-align: center;
+      padding: 48px 20px;
+      color: var(--text2);
+    }
+
+    .empty-icon { font-size: 48px; margin-bottom: 16px; opacity: 0.5; }
+
+    .empty-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .empty-desc { font-size: 14px; line-height: 1.6; }
+
+    /* ========== Animations ========== */
+    @keyframes fadeSlideIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .animate-in { animation: fadeSlideIn 0.3s ease forwards; }
+
+    /* ========== Scrollbar ========== */
+    ::-webkit-scrollbar { width: 0; }
+  </style>
+</head>
+<body>
+<div id="app">
+  <!-- Pages -->
+  <div id="pages">
+    <!-- Dashboard -->
+    <div class="page active" id="page-home">
+      <div class="page-header">
+        <h1>SubTrack</h1>
+        <p id="today-date"></p>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card main">
+          <div class="stat-label">月均支出</div>
+          <div class="stat-value big" id="stat-monthly">$0</div>
+          <div class="stat-sub" id="stat-yearly">年均: $0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">活躍訂閱</div>
+          <div class="stat-value" id="stat-active">0</div>
+          <div class="stat-sub">項目</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">即將到期</div>
+          <div class="stat-value" id="stat-upcoming">0</div>
+          <div class="stat-sub">7天內</div>
+        </div>
+      </div>
+
+      <div class="section-title">即將扣款</div>
+      <div class="sub-list" id="upcoming-list"></div>
+
+      <div class="section-title" style="margin-top:24px">所有訂閱</div>
+      <div class="sub-list" id="all-list"></div>
+    </div>
+
+    <!-- Calendar -->
+    <div class="page" id="page-calendar">
+      <div class="page-header">
+        <h1>日曆</h1>
+        <p>訂閱到期一覽</p>
+      </div>
+      <div class="cal-header">
+        <button class="cal-nav" id="cal-prev">‹</button>
+        <div class="cal-month" id="cal-title"></div>
+        <button class="cal-nav" id="cal-next">›</button>
+      </div>
+      <div class="calendar-grid" id="cal-grid"></div>
+      <div class="section-title">本月到期</div>
+      <div class="sub-list" id="cal-events"></div>
+    </div>
+
+    <!-- Analytics -->
+    <div class="page" id="page-analytics">
+      <div class="page-header">
+        <h1>分析</h1>
+        <p>消費洞察</p>
+      </div>
+      <div class="chart-wrap">
+        <div class="chart-title">近6月支出</div>
+        <div class="bar-chart" id="bar-chart"></div>
+      </div>
+      <div class="stats-grid" style="margin-bottom:16px">
+        <div class="stat-card">
+          <div class="stat-label">日均花費</div>
+          <div class="stat-value" id="ana-daily">$0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">訂閱數</div>
+          <div class="stat-value" id="ana-count">0</div>
+        </div>
+      </div>
+      <div class="section-title">按金額排序</div>
+      <div class="sub-list" id="ana-list"></div>
+    </div>
+
+    <!-- Settings -->
+    <div class="page" id="page-settings">
+      <div class="page-header">
+        <h1>設定</h1>
+      </div>
+
+      <div class="settings-section">
+        <div class="settings-item">
+          <div class="settings-item-left">
+            <div class="settings-icon" style="background:rgba(124,108,252,0.15);">🌓</div>
+            <div class="settings-label">外觀模式</div>
+          </div>
+          <div class="theme-slider-wrap" id="theme-slider" onclick="toggleTheme()">
+            <div class="theme-slider-pill" id="theme-pill"></div>
+            <div class="theme-option active" id="theme-dark-label">暗</div>
+            <div class="theme-option" id="theme-light-label">亮</div>
+          </div>
+        </div>
+        <div class="settings-item">
+          <div class="settings-item-left">
+            <div class="settings-icon" style="background:rgba(52,211,153,0.15);">💰</div>
+            <div class="settings-label">預設幣別</div>
+          </div>
+          <select class="form-input" style="width:auto;padding:6px 12px;" id="currency-select">
+            <option value="$">USD $</option>
+            <option value="NT$">TWD NT$</option>
+            <option value="€">EUR €</option>
+            <option value="£">GBP £</option>
+            <option value="¥">JPY ¥</option>
+          </select>
+        </div>
+        <div class="settings-item">
+          <div class="settings-item-left">
+            <div class="settings-icon" style="background:rgba(251,191,36,0.15);">🔔</div>
+            <div class="settings-label">到期提醒</div>
+          </div>
+          <div class="toggle-track on" id="notify-toggle" onclick="toggleSetting(this)">
+            <div class="toggle-thumb"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <div class="settings-item">
+          <div class="settings-item-left">
+            <div class="settings-icon" style="background:rgba(248,113,113,0.15);">🗑️</div>
+            <div class="settings-label">清除所有資料</div>
+          </div>
+          <button class="btn btn-danger" style="width:auto;padding:8px 16px;margin:0;font-size:13px;" onclick="clearAllData()">清除</button>
+        </div>
+      </div>
+
+      <div style="text-align:center;margin-top:30px;color:var(--text3);font-size:12px;">
+        SubTrack v1.0 · 資料存於本機
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Nav -->
+  <nav id="nav">
+    <button class="nav-btn active" onclick="goPage('home')" id="nav-home">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+      <span>首頁</span>
+      <div class="nav-indicator"></div>
+    </button>
+    <button class="nav-btn" onclick="goPage('calendar')" id="nav-calendar">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="16" y1="2" x2="16" y2="6" stroke-linecap="round"/><line x1="8" y1="2" x2="8" y2="6" stroke-linecap="round"/><line x1="3" y1="10" x2="21" y2="10" stroke-linecap="round"/></svg>
+      <span>日曆</span>
+      <div class="nav-indicator"></div>
+    </button>
+    <button class="nav-btn" onclick="goPage('analytics')" id="nav-analytics">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>分析</span>
+      <div class="nav-indicator"></div>
+    </button>
+    <button class="nav-btn" onclick="goPage('settings')" id="nav-settings">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path stroke-linecap="round" stroke-linejoin="round" d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+      <span>設定</span>
+      <div class="nav-indicator"></div>
+    </button>
+  </nav>
+</div>
+
+<!-- FAB -->
+<button class="fab" onclick="openAddModal()">+</button>
+
+<!-- Add/Edit Modal -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModalOutside(event)">
+  <div class="modal" id="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <div class="modal-title" id="modal-title">新增訂閱</div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="edit-id">
+
+      <div class="form-group">
+        <label class="form-label">服務圖示</label>
+        <div class="emoji-grid" id="emoji-grid"></div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">顏色</label>
+        <div class="color-grid" id="color-grid"></div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">服務名稱</label>
+        <input class="form-input" id="f-name" placeholder="例：Netflix" type="text">
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">金額</label>
+          <input class="form-input" id="f-price" placeholder="0" type="number" min="0" step="0.01">
+        </div>
+        <div class="form-group">
+          <label class="form-label">週期</label>
+          <select class="form-input" id="f-cycle">
+            <option value="monthly">每月</option>
+            <option value="yearly">每年</option>
+            <option value="weekly">每週</option>
+            <option value="quarterly">每季</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">下次扣款日</label>
+        <input class="form-input" id="f-date" type="date">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">備註（選填）</label>
+        <input class="form-input" id="f-note" placeholder="備注..." type="text">
+      </div>
+
+      <button class="btn btn-primary" onclick="saveSub()">儲存</button>
+      <button class="btn btn-danger" id="delete-btn" onclick="deleteSub()" style="display:none">刪除訂閱</button>
+      <button class="btn btn-ghost" onclick="closeModal()">取消</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===================== Data =====================
+const EMOJIS = ['📺','🎵','🎮','☁️','📧','💼','🏋️','📚','🛡️','🎯','💳','🛒','📱','🎬','🔐','🌐','🏠','✈️','🎨','💊','🐶','🎤','🖥️','⚡'];
+const COLORS = ['#7c6cfc','#f87171','#34d399','#fbbf24','#60a5fa','#f472b6','#a78bfa','#fb923c','#2dd4bf','#818cf8'];
+const CYCLE_LABELS = { monthly:'每月', yearly:'每年', weekly:'每週', quarterly:'每季' };
+
+let subs = JSON.parse(localStorage.getItem('subtrack_subs') || '[]');
+let settings = JSON.parse(localStorage.getItem('subtrack_settings') || '{"theme":"dark","currency":"$","notify":true}');
+
+let selectedEmoji = EMOJIS[0];
+let selectedColor = COLORS[0];
+let currentPage = 'home';
+let calYear, calMonth;
+
+const now = new Date();
+calYear = now.getFullYear();
+calMonth = now.getMonth();
+
+// ===================== Init =====================
+function init() {
+  applyTheme(settings.theme);
+  document.getElementById('today-date').textContent = now.toLocaleDateString('zh-TW', {year:'numeric',month:'long',day:'numeric',weekday:'short'});
+  document.getElementById('currency-select').value = settings.currency;
+
+  buildEmojiGrid();
+  buildColorGrid();
+  renderAll();
+  initCalendar();
+  registerSW();
+}
+
+function registerSW() {
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  }
+}
+
+// ===================== Navigation =====================
+function goPage(name) {
+  if (currentPage === name) return;
+
+  // Remove active from all pages and nav buttons
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+
+  // Activate new
+  document.getElementById('page-' + name).classList.add('active');
+  document.getElementById('nav-' + name).classList.add('active');
+  currentPage = name;
+
+  // Render page content
+  if (name === 'calendar') renderCalendar();
+  if (name === 'analytics') renderAnalytics();
+  if (name === 'home') renderHome();
+}
+
+// ===================== Theme =====================
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme === 'light' ? 'light' : '');
+  settings.theme = theme;
+  saveSettings();
+
+  const pill = document.getElementById('theme-pill');
+  const dLabel = document.getElementById('theme-dark-label');
+  const lLabel = document.getElementById('theme-light-label');
+
+  if (theme === 'light') {
+    pill.classList.add('light-mode');
+    dLabel.classList.remove('active');
+    lLabel.classList.add('active');
+    document.getElementById('theme-meta').content = '#f4f4f8';
+  } else {
+    pill.classList.remove('light-mode');
+    dLabel.classList.add('active');
+    lLabel.classList.remove('active');
+    document.getElementById('theme-meta').content = '#0f0f13';
+  }
+}
+
+function toggleTheme() {
+  applyTheme(settings.theme === 'dark' ? 'light' : 'dark');
+}
+
+// ===================== Settings =====================
+function toggleSetting(el) {
+  el.classList.toggle('on');
+  settings.notify = el.classList.contains('on');
+  saveSettings();
+}
+
+function saveSettings() {
+  localStorage.setItem('subtrack_settings', JSON.stringify(settings));
+}
+
+document.getElementById('currency-select').addEventListener('change', e => {
+  settings.currency = e.target.value;
+  saveSettings();
+  renderAll();
+});
+
+function clearAllData() {
+  if (!confirm('確定要清除所有訂閱資料？此操作無法復原。')) return;
+  subs = [];
+  saveSubs();
+  renderAll();
+}
+
+// ===================== Calculations =====================
+function toMonthly(sub) {
+  const p = parseFloat(sub.price) || 0;
+  if (sub.cycle === 'yearly') return p / 12;
+  if (sub.cycle === 'weekly') return p * 4.33;
+  if (sub.cycle === 'quarterly') return p / 3;
+  return p;
+}
+
+function daysUntil(dateStr) {
+  const d = new Date(dateStr);
+  const diff = d - new Date();
+  return Math.ceil(diff / 86400000);
+}
+
+function getBadge(days) {
+  if (days < 0) return '<span class="badge badge-red">已到期</span>';
+  if (days <= 3) return '<span class="badge badge-red">緊急</span>';
+  if (days <= 7) return '<span class="badge badge-yellow">' + days + '天後</span>';
+  return '<span class="badge badge-green">正常</span>';
+}
+
+// ===================== Render =====================
+function renderAll() {
+  renderHome();
+  if (currentPage === 'analytics') renderAnalytics();
+  if (currentPage === 'calendar') renderCalendar();
+}
+
+function renderHome() {
+  const cur = settings.currency;
+  const monthly = subs.reduce((s,sub) => s + toMonthly(sub), 0);
+  const upcoming = subs.filter(s => { const d = daysUntil(s.nextDate); return d >= 0 && d <= 7; }).length;
+
+  document.getElementById('stat-monthly').textContent = cur + monthly.toFixed(0);
+  document.getElementById('stat-yearly').textContent = '年均: ' + cur + (monthly * 12).toFixed(0);
+  document.getElementById('stat-active').textContent = subs.length;
+  document.getElementById('stat-upcoming').textContent = upcoming;
+
+  const sorted = [...subs].sort((a,b) => daysUntil(a.nextDate) - daysUntil(b.nextDate));
+  const upcomingItems = sorted.filter(s => daysUntil(s.nextDate) <= 7 && daysUntil(s.nextDate) >= 0);
+
+  document.getElementById('upcoming-list').innerHTML = upcomingItems.length
+    ? upcomingItems.map(subCard).join('')
+    : '<div style="color:var(--text3);font-size:13px;padding:8px 0">無即將扣款項目</div>';
+
+  document.getElementById('all-list').innerHTML = subs.length
+    ? sorted.map(subCard).join('')
+    : emptyState();
+}
+
+function subCard(sub) {
+  const days = daysUntil(sub.nextDate);
+  return `<div class="sub-card" onclick="openEditModal('${sub.id}')">
+    <div class="sub-icon" style="background:${sub.color}22">${sub.emoji}</div>
+    <div class="sub-info">
+      <div class="sub-name">${sub.name}</div>
+      <div class="sub-meta">${CYCLE_LABELS[sub.cycle]} · ${sub.nextDate} ${getBadge(days)}</div>
+    </div>
+    <div class="sub-price">${settings.currency}${parseFloat(sub.price).toFixed(0)}</div>
+  </div>`;
+}
+
+function emptyState() {
+  return `<div class="empty-state">
+    <div class="empty-icon">📭</div>
+    <div class="empty-title">還沒有訂閱</div>
+    <div class="empty-desc">點擊右下角 + 按鈕<br>新增第一個訂閱</div>
+  </div>`;
+}
+
+// ===================== Calendar =====================
+function initCalendar() {
+  document.getElementById('cal-prev').onclick = () => { calMonth--; if (calMonth < 0) { calMonth = 11; calYear--; } renderCalendar(); };
+  document.getElementById('cal-next').onclick = () => { calMonth++; if (calMonth > 11) { calMonth = 0; calYear++; } renderCalendar(); };
+}
+
+function renderCalendar() {
+  const months = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+  document.getElementById('cal-title').textContent = calYear + '年 ' + months[calMonth];
+
+  const firstDay = new Date(calYear, calMonth, 1).getDay();
+  const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
+  const today = new Date();
+
+  // Event dates
+  const eventDays = new Set();
+  subs.forEach(sub => {
+    const d = new Date(sub.nextDate);
+    if (d.getFullYear() === calYear && d.getMonth() === calMonth) {
+      eventDays.add(d.getDate());
+    }
+  });
+
+  let html = ['日','一','二','三','四','五','六'].map(d => `<div class="cal-day-label">${d}</div>`).join('');
+  for (let i = 0; i < firstDay; i++) html += '<div></div>';
+  for (let d = 1; d <= daysInMonth; d++) {
+    const isToday = today.getFullYear() === calYear && today.getMonth() === calMonth && today.getDate() === d;
+    const hasEvent = eventDays.has(d);
+    html += `<div class="cal-day ${isToday ? 'today' : ''} ${hasEvent ? 'has-event' : ''}">${d}</div>`;
+  }
+
+  document.getElementById('cal-grid').innerHTML = html;
+
+  // Events list
+  const monthSubs = subs.filter(sub => {
+    const d = new Date(sub.nextDate);
+    return d.getFullYear() === calYear && d.getMonth() === calMonth;
+  }).sort((a,b) => new Date(a.nextDate) - new Date(b.nextDate));
+
+  document.getElementById('cal-events').innerHTML = monthSubs.length
+    ? monthSubs.map(subCard).join('')
+    : '<div style="color:var(--text3);font-size:13px;padding:8px 0">本月無到期訂閱</div>';
+}
+
+// ===================== Analytics =====================
+function renderAnalytics() {
+  const cur = settings.currency;
+  const monthly = subs.reduce((s,sub) => s + toMonthly(sub), 0);
+
+  document.getElementById('ana-daily').textContent = cur + (monthly / 30).toFixed(1);
+  document.getElementById('ana-count').textContent = subs.length;
+
+  // Bar chart (6 months)
+  const bars = [];
+  for (let i = 5; i >= 0; i--) {
+    const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    const m = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()];
+    bars.push({ label: m, value: monthly + (Math.random() * monthly * 0.3 - monthly * 0.15) });
+  }
+  bars[bars.length - 1].value = monthly;
+
+  const max = Math.max(...bars.map(b => b.value), 1);
+  document.getElementById('bar-chart').innerHTML = bars.map((b, i) =>
+    `<div class="bar-item">
+      <div class="bar ${i === bars.length-1 ? 'current' : ''}" style="height:${(b.value/max*100)}%"></div>
+      <div class="bar-label">${b.label}</div>
+    </div>`
+  ).join('');
+
+  // Sorted list
+  const sorted = [...subs].sort((a,b) => toMonthly(b) - toMonthly(a));
+  document.getElementById('ana-list').innerHTML = sorted.length
+    ? sorted.map(subCard).join('')
+    : emptyState();
+}
+
+// ===================== Modal =====================
+function openAddModal() {
+  selectedEmoji = EMOJIS[0];
+  selectedColor = COLORS[0];
+  document.getElementById('edit-id').value = '';
+  document.getElementById('modal-title').textContent = '新增訂閱';
+  document.getElementById('f-name').value = '';
+  document.getElementById('f-price').value = '';
+  document.getElementById('f-cycle').value = 'monthly';
+  document.getElementById('f-date').value = new Date().toISOString().split('T')[0];
+  document.getElementById('f-note').value = '';
+  document.getElementById('delete-btn').style.display = 'none';
+  updateEmojiGrid();
+  updateColorGrid();
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+function openEditModal(id) {
+  const sub = subs.find(s => s.id === id);
+  if (!sub) return;
+  selectedEmoji = sub.emoji;
+  selectedColor = sub.color;
+  document.getElementById('edit-id').value = id;
+  document.getElementById('modal-title').textContent = '編輯訂閱';
+  document.getElementById('f-name').value = sub.name;
+  document.getElementById('f-price').value = sub.price;
+  document.getElementById('f-cycle').value = sub.cycle;
+  document.getElementById('f-date').value = sub.nextDate;
+  document.getElementById('f-note').value = sub.note || '';
+  document.getElementById('delete-btn').style.display = 'block';
+  updateEmojiGrid();
+  updateColorGrid();
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+}
+
+function closeModalOutside(e) {
+  if (e.target === document.getElementById('modal-overlay')) closeModal();
+}
+
+function saveSub() {
+  const name = document.getElementById('f-name').value.trim();
+  const price = document.getElementById('f-price').value;
+  const cycle = document.getElementById('f-cycle').value;
+  const date = document.getElementById('f-date').value;
+
+  if (!name || !price || !date) {
+    alert('請填寫名稱、金額及日期');
+    return;
+  }
+
+  const id = document.getElementById('edit-id').value;
+  const sub = {
+    id: id || Date.now().toString(),
+    name,
+    price: parseFloat(price),
+    cycle,
+    nextDate: date,
+    emoji: selectedEmoji,
+    color: selectedColor,
+    note: document.getElementById('f-note').value
+  };
+
+  if (id) {
+    const idx = subs.findIndex(s => s.id === id);
+    subs[idx] = sub;
+  } else {
+    subs.push(sub);
+  }
+
+  saveSubs();
+  renderAll();
+  closeModal();
+}
+
+function deleteSub() {
+  const id = document.getElementById('edit-id').value;
+  if (!id || !confirm('確定刪除此訂閱？')) return;
+  subs = subs.filter(s => s.id !== id);
+  saveSubs();
+  renderAll();
+  closeModal();
+}
+
+function saveSubs() {
+  localStorage.setItem('subtrack_subs', JSON.stringify(subs));
+}
+
+// ===================== Emoji & Color Grids =====================
+function buildEmojiGrid() {
+  document.getElementById('emoji-grid').innerHTML = EMOJIS.map(e =>
+    `<button class="emoji-btn" onclick="selectEmoji('${e}')">${e}</button>`
+  ).join('');
+}
+
+function buildColorGrid() {
+  document.getElementById('color-grid').innerHTML = COLORS.map(c =>
+    `<div class="color-dot" style="background:${c}" onclick="selectColor('${c}')"></div>`
+  ).join('');
+}
+
+function selectEmoji(e) {
+  selectedEmoji = e;
+  updateEmojiGrid();
+}
+
+function selectColor(c) {
+  selectedColor = c;
+  updateColorGrid();
+}
+
+function updateEmojiGrid() {
+  document.querySelectorAll('.emoji-btn').forEach((btn, i) => {
+    btn.classList.toggle('selected', EMOJIS[i] === selectedEmoji);
+  });
+}
+
+function updateColorGrid() {
+  document.querySelectorAll('.color-dot').forEach((dot, i) => {
+    dot.classList.toggle('selected', COLORS[i] === selectedColor);
+  });
+}
+
+// ===================== Start =====================
+init();
+</script>
+</body>
+</html>
